@@ -1,0 +1,80 @@
+.custom-button {
+  display: inline-block;
+  padding: 17px 20px;
+  width: 150px;
+  border-radius: 50px; /* Makes the button oval */
+  background: linear-gradient(to right, #00aaff, #ffffff); /* Button gradient */
+  position: relative;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1;
+  border: none; /* No default border */
+}
+
+.custom-button::before {
+  content: "";
+  position: absolute;
+  top: 5px; /* Creates the gap for border effect */
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.2); /* Inner opaque layer */
+  z-index: -1;
+}
+
+.custom-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50px;
+  background: linear-gradient(to right, #00aaff, #ffffff); /* Gradient border */
+  z-index: -2;
+  pointer-events: none;
+}
+
+.custom-field {
+  display: inline-block;
+  padding: 17px 20px;
+  width: 100%;
+  border-radius: 50px; /* Makes the button oval */
+  background: linear-gradient(to right, #00aaff, #ffffff); /* Button gradient */
+  position: relative;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+
+  z-index: 1;
+  border: none;
+}
+.custom-field::before {
+  content: "";
+  position: absolute;
+  top: 5px; /* Creates the gap for border effect */
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.2); /* Inner opaque layer */
+  z-index: -1;
+}
+
+.custom-field::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50px;
+  background: linear-gradient(to right, #00aaff, #ffffff); /* Gradient border */
+  z-index: -2;
+  pointer-events: none;
+}
