@@ -330,6 +330,8 @@
 // export default PaymentCard;
 
 
+//====================================================================
+
 
 import React, { useState } from "react";
 import {
@@ -384,6 +386,53 @@ function PaymentCard() {
   const [responseMessage, setResponseMessage] = useState("");
   const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
 
+  // const handlePaymentSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!stripe || !elements) return; // Stripe.js has not loaded yet
+
+  //   const { name, cardNumber, userId } = formData;
+
+  //   if (!name || !cardNumber) {
+  //     setResponseMessage("Please fill in all fields.");
+  //     return;
+  //   }
+
+  //   setIsProcessing(true);
+
+  //   // Step 1: Create a payment intent (make sure your backend handles this)
+  //   try {
+  //     const orderResponse = await createOrder({ amount: 500, currency: 'usd' }); // Use appropriate amount & currency
+  //     const { clientSecret } = orderResponse.data; // Get client secret from backend
+
+  //     // Step 2: Confirm the payment
+  //     const cardElement = elements.getElement(CardElement);
+
+  //     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+  //       payment_method: {
+  //         card: cardElement,
+  //         billing_details: {
+  //           name: name,
+  //         },
+  //       },
+  //     });
+
+  //     if (paymentResult.error) {
+  //       setResponseMessage(`Payment failed: ${paymentResult.error.message}`);
+  //       setIsProcessing(false);
+  //     } else if (paymentResult.paymentIntent.status === 'succeeded') {
+  //       setResponseMessage("Payment successful!");
+  //       // Step 3: Verify payment on backend
+  //       await verifyPayment({ paymentIntentId: paymentResult.paymentIntent.id });
+  //       setIsProcessing(false);
+  //     }
+  //   } catch (error) {
+  //     setResponseMessage(`Error: ${error.message}`);
+  //     setIsProcessing(false);
+  //   }
+  // };
+
+
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -420,85 +469,7 @@ function PaymentCard() {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
   
-  //   const {
-  //     name, set, releaseYear, cardNumber, language,
-  //     label, certificationNumber, address,
-  //   } = formData;
-  
-  //   // Basic validation
-  //   if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
-  //     setResponseMessage("All fields are required!");
-  //     return;
-  //   }
-  
-  //   // Step 1: Call your backend to create a Razorpay order
-  //   const amount = 500; // Example amount in INR
-  //   const currency = 'INR';
-
-  //   generateQRCode(cardNumber);
-  
-  //   try {
-  //     const orderResponse = await fetch('/create-order', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ amount, currency }),
-  //     });
-  
-  //     const orderData = await orderResponse.json();
-  
-  //     if (!orderData || !orderData.id) {
-  //       setResponseMessage("Error creating Razorpay order. Please try again.");
-  //       return;
-  //     }
-  
-  //     // Step 2: Configure Razorpay options
-  //     const options = {
-  //       key: 'YOUR_RAZORPAY_KEY_ID', // Replace with your Razorpay Key ID
-  //       amount: orderData.amount,
-  //       currency: orderData.currency,
-  //       name: "Card Service",
-  //       description: "Payment for card creation",
-  //       order_id: orderData.id,
-  //       handler: async (response) => {
-  //         // Step 3: Verify payment on the backend
-  //         const verifyResponse = await fetch('/verify-payment', {
-  //           method: 'POST',
-  //           headers: { 'Content-Type': 'application/json' },
-  //           body: JSON.stringify(response),
-  //         });
-  
-  //         const verifyData = await verifyResponse.json();
-  
-  //         if (verifyData.status === "success") {
-  //           // Step 4: Call addCard mutation to create the card
-  //           try {
-  //             await addCard(formData);
-  //             setResponseMessage("Card created successfully!");
-  //           } catch (error) {
-  //             setResponseMessage(`Errors: ${error.message}`);
-  //           }
-  //         } else {
-  //           setResponseMessage("Payment verification failed. Please try again.");
-  //         }
-  //       },
-  //       prefill: {
-  //         name: "John Doe",
-  //         email: "john.doe@example.com",
-  //         contact: "9999999999",
-  //       },
-  //       theme: { color: "#3399cc" },
-  //     };
-  
-  //     // Step 5: Open Razorpay payment modal
-  //     const razorpayInstance = new window.Razorpay(options);
-  //     razorpayInstance.open();
-  //   } catch (error) {
-  //     setResponseMessage(`Error: ${error.message}`);
-  //   }
-  // };
 
   const [cardNumber, setCardNumber] = useState(""); // To store the card number
   const [qrCodeUrl, setQrCodeUrl] = useState(""); // To store the generated QR code URL
@@ -734,6 +705,17 @@ function PaymentCard() {
           <button onClick={downloadQRCode}>Download QR Code</button>
         </div>
       )}
+              {/* QR Code Section */}
+              {qrCodeUrl && (
+          <Box sx={{ textAlign: "center", mt: 4 }}>
+            <Typography color="white">QR Code Generated:</Typography>
+            <img src={qrCodeUrl} alt="QR Code" style={{ width: "150px", height: "150px", margin: "10px auto" }} />
+            <Button onClick={downloadQRCode} variant="outlined" color="primary">
+              Download QR Code
+            </Button>
+          </Box>
+        )}
+
           </Typography>
         )}
       </Box>
@@ -743,3 +725,173 @@ function PaymentCard() {
 
 export default PaymentCard;
 
+//==========================================================
+
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Button,
+//   Container,
+//   Typography,
+//   Divider,
+//   CircularProgress,
+// } from "@mui/material";
+// import QRCode from "qrcode";
+// import { useAddCardMutation, useGetCardByUserIdQuery } from "../api/apiSlice";
+// import { useAuth } from "../authentication/authProvider";
+
+// function PaymentCard() {
+//   const { user, isAuthenticated } = useAuth();
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     set: "",
+//     releaseYear: "",
+//     cardNumber: "",
+//     language: "",
+//     label: "",
+//     certificationNumber: "",
+//     address: "",
+//     userId: user?.id,
+//   });
+
+//   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+//   const [isPaymentSuccessful, setIsPaymentSuccessful] = useState(false);
+//   const [responseMessage, setResponseMessage] = useState("");
+//   const [qrCodeUrl, setQrCodeUrl] = useState("");
+
+//   const [addCard] = useAddCardMutation();
+//   const { data: cards = [] } = useGetCardByUserIdQuery(user?.id);
+
+//   // Handle payment process
+//   const handlePayment = async () => {
+//     setIsProcessingPayment(true);
+//     try {
+//       // Simulate payment process (replace with actual payment API)
+//       await new Promise((resolve) => setTimeout(resolve, 2000));
+//       setIsPaymentSuccessful(true);
+//       setResponseMessage("Payment successful! You can now submit your card.");
+//     } catch (error) {
+//       setResponseMessage("Payment failed. Please try again.");
+//     } finally {
+//       setIsProcessingPayment(false);
+//     }
+//   };
+
+//   // Handle form input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   // Handle card submission
+//   const handleSubmitCard = async (e) => {
+//     e.preventDefault();
+
+//     const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
+
+//     if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
+//       setResponseMessage("All fields are required!");
+//       return;
+//     }
+
+//     try {
+//       await addCard(formData);
+//       setResponseMessage("Card submitted successfully!");
+//       generateQRCode(cardNumber);
+//     } catch (error) {
+//       setResponseMessage(`Error: ${error.message}`);
+//     }
+//   };
+
+//   // Generate QR code
+//   const generateQRCode = (cardNumber) => {
+//     QRCode.toDataURL(cardNumber, { errorCorrectionLevel: "H" })
+//       .then((url) => setQrCodeUrl(url))
+//       .catch((err) => console.error("Error generating QR Code:", err));
+//   };
+
+//   // Download QR code
+//   const downloadQRCode = () => {
+//     const a = document.createElement("a");
+//     a.href = qrCodeUrl;
+//     a.download = `${formData.cardNumber}_qr.png`;
+//     a.click();
+//   };
+
+//   return (
+//     <Container maxWidth="lg" sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+//       <Box sx={{ width: "100%", p: 4, borderRadius: 3, backgroundColor: "#333" }}>
+//         <Typography variant="h4" align="center" gutterBottom color="white">
+//           Submit Your Card Details For Grading
+//         </Typography>
+//         <Divider sx={{ bgcolor: "#7D7A7A", mb: 4 }} />
+
+//         {/* Payment Section */}
+//         {!isPaymentSuccessful ? (
+//           <Box sx={{ textAlign: "center" }}>
+//             <Button
+//               variant="contained"
+//               color="primary"
+//               onClick={handlePayment}
+//               disabled={isProcessingPayment}
+//               sx={{ mb: 4 }}
+//             >
+//               {isProcessingPayment ? <CircularProgress size={24} color="inherit" /> : "Make Payment"}
+//             </Button>
+//             <Typography color="white">{responseMessage}</Typography>
+//           </Box>
+//         ) : (
+//           <>
+//             <Typography color="lightgreen" align="center" sx={{ mb: 4 }}>
+//               Payment successful! Please fill out the form below to submit your card.
+//             </Typography>
+//             {/* Card Submission Form */}
+//             <form onSubmit={handleSubmitCard}>
+//               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+//                 {["name", "set", "releaseYear", "cardNumber", "language", "label", "certificationNumber", "address"].map(
+//                   (field) => (
+//                     <input
+//                       key={field}
+//                       type="text"
+//                       name={field}
+//                       placeholder={`Enter ${field}`}
+//                       value={formData[field]}
+//                       onChange={handleChange}
+//                       className="input-field"
+//                       style={{
+//                         padding: "10px",
+//                         borderRadius: "8px",
+//                         border: "2px solid #ccc",
+//                         marginBottom: "8px",
+//                       }}
+//                     />
+//                   )
+//                 )}
+//                 <Button type="submit" variant="contained" color="success">
+//                   Submit Card
+//                 </Button>
+//               </Box>
+//             </form>
+//           </>
+//         )}
+
+//         {/* QR Code Section */}
+//         {qrCodeUrl && (
+//           <Box sx={{ textAlign: "center", mt: 4 }}>
+//             <Typography color="white">QR Code Generated:</Typography>
+//             <img src={qrCodeUrl} alt="QR Code" style={{ width: "150px", height: "150px", margin: "10px auto" }} />
+//             <Button onClick={downloadQRCode} variant="outlined" color="primary">
+//               Download QR Code
+//             </Button>
+//           </Box>
+//         )}
+
+//         <Typography color="white" align="center" sx={{ mt: 4 }}>
+//           {responseMessage}
+//         </Typography>
+//       </Box>
+//     </Container>
+//   );
+// }
+
+// export default PaymentCard;

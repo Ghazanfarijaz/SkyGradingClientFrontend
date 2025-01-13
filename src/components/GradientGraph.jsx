@@ -25,11 +25,22 @@ const data = [
   { grade: 10, cards: 50 },
 ];
 
-const GradientAreaChart = () => {
+const GradientAreaChart = ({allCards}) => {
+
+  console.log("all carsd" , allCards)
+
+  const formattedData = allCards.map((item) => ({
+    grade: item.grade || "N/A",
+    cards: item.cardNumber || 0, // Use a property suitable for the chart
+  }));
+
+  console.log("data format" , formattedData)
+
+
   return (
     <ResponsiveContainer width="100%" height={700}>
       <AreaChart
-        data={data}
+        data={formattedData}
         margin={{ top: 10, right: 30, left: 30, bottom: 50 }}
       >
         <defs>

@@ -222,7 +222,7 @@ export default function SearchCard() {
   
     if (cardIndex !== -1) {
       // Card found, set it as selected
-      setSelectedCard(cards[cardIndex]);
+      setSelectedCard(allCards[cardIndex]);
       setShow(true);
       if (swiperRef.current) {
         swiperRef.current.slideTo(cardIndex);
@@ -794,7 +794,7 @@ export default function SearchCard() {
           </div>
           {/* <GradientAreaChart /> */}
           <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-28">
-            <GradientAreaChart />
+            <GradientAreaChart  allCards={allCards}/>
           </div>
         </>
       )}
