@@ -17,6 +17,7 @@ import { Provider } from "react-redux"; // Import Provider from react-redux
 import store from "./api/store";
 import { AuthProvider } from "./authentication/authProvider";
 import PrivateRoute from "./authentication/PrivateRoute"; // Import the PrivateRoute component
+import Success from "./components/Success";
 
 function App() {
   return (
@@ -103,6 +104,17 @@ function App() {
                   </PrivateRoute>
                 }
               />
+               <Route
+                path="/success"
+                element={
+                  <PrivateRoute>
+                    <Layout>
+                      <Success />
+                    </Layout>
+                  </PrivateRoute>
+                }
+              />
+             
             </Routes>
           </div>
         </Router>

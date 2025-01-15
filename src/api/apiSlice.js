@@ -75,6 +75,17 @@ const apiSlice = createApi({
       query: () => "/cards", // API endpoint to fetch all users
       providesTags: ["Cards"], // Define tags for cache management
     }),
+      // Update a user by ID
+    updateUser: builder.mutation({
+      query: ({ id, ...userData }) => ({
+        url: `/users/users/${id}`,
+        method: "PUT",
+        body: userData,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: "User", id }], // Invalidate the user cache
+    }),
+
+
     //=====
     createOrder: builder.mutation({
       query: (orderData) => ({
@@ -90,6 +101,7 @@ const apiSlice = createApi({
         body: paymentData,
       }),
     }),
+    
   }), 
  
 });
@@ -103,6 +115,7 @@ export const {
   useGetCardByUserIdQuery,
   useGetCardByUserIdAndCardNumberQuery,
   useGetAllCardsQuery,
+  useUpdateUserMutation,
   //========
   useCreateOrderMutation,
   useVerifyPaymentMutation

@@ -1,26 +1,54 @@
-import React from "react";
-import { Grid, Button, Typography, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import { Grid, Button, Typography, IconButton, Menu, MenuItem, Avatar } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu"; // Import a Menu Icon for mobile
 import CloseIcon from "@mui/icons-material/Close"; // Import a Close Icon for mobile
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../theme";
 import Logo from "../assets/logo.png";
+import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 
-const navLinks = [
+// Define all possible navigation links
+const allNavLinks = [
   { name: "Home", path: "/" },
   { name: "Search Card", path: "/search" },
   { name: "Pricing", path: "/pricing" },
-  { name: "Submit Card", path: "/submit" },
-  { name: "Tracking", path: "/tracking" },
+  { name: "Submit Card", path: "/submit", requiresAuth: true }, // Requires authentication
+  { name: "Tracking", path: "/tracking", requiresAuth: true }, // Requires authentication
   { name: "Contact Us", path: "/contact" },
+
 ];
 
 function Navbar() {
+  const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation(); // Get the current route location
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false); // State to toggle mobile menu
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // State to toggle mobile menu
+  const [anchorEl, setAnchorEl] = useState(null); // State for profile dropdown
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  // Filter navigation links based on authentication
+  const navLinks = allNavLinks.filter((link) => {
+    if (link.requiresAuth) {
+      return isAuthenticated; // Only include if authenticated
+    }
+    return true; // Include all other links
+  });
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+
+  const handleProfileClick = (event) => {
+    setAnchorEl(event.currentTarget); // Open the dropdown menu
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null); // Close the dropdown menu
+  };
+
+  const handleLogout = () => {
+    logout(); // Call the logout function from AuthProvider
+    handleClose(); // Close the dropdown menu
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -39,7 +67,6 @@ function Navbar() {
             xs: "linear-gradient(to top, rgba(0, 0, 0, 0.9) , rgba(2, 204, 254, 0.4))",
             md: "linear-gradient(to top, rgba(0, 0, 0, 0.9) , rgba(2, 204, 254, 0.4))",
           },
-
           p: 2,
           zIndex: 1000,
         }}
@@ -125,11 +152,11 @@ function Navbar() {
             onClick={toggleMobileMenu}
             sx={{ color: "rgba(242, 242, 242, 0.7)" }}
           >
-             {mobileMenuOpen ? (
-      <CloseIcon sx={{ fontSize: "2.5rem" }} /> // Increase icon size
-    ) : (
-      <MenuIcon sx={{ fontSize: "2.5rem" }} /> // Increase icon size
-    )}
+            {mobileMenuOpen ? (
+              <CloseIcon sx={{ fontSize: "2.5rem" }} /> // Increase icon size
+            ) : (
+              <MenuIcon sx={{ fontSize: "2.5rem" }} /> // Increase icon size
+            )}
           </IconButton>
         </Grid>
 
@@ -143,33 +170,83 @@ function Navbar() {
             gap: 2,
           }}
         >
-          <Link to={"/login"}>
-            <Button
-              variant="text"
-              sx={{
-                color: "rgba(242, 242, 242, 0.7)",
-                fontWeight: "medium",
-                fontSize: "20px",
-              }}
-            >
-              Sign In
-            </Button>
-          </Link>
-          <Link to={"/signup"}>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "primary.main",
-                color: "black",
-                fontWeight: "bold",
-                borderRadius: "12px",
-                textTransform: "none",
-                fontSize: "20px",
-              }}
-            >
-              Join Now
-            </Button>
-          </Link>
+        {isAuthenticated ? (
+  <>
+    <Button
+      onClick={handleProfileClick}
+      sx={{
+        color: "rgba(242, 242, 242, 0.7)",
+        fontWeight: "medium",
+        fontSize: "20px",
+        display: "flex",
+        alignItems: "center",
+        gap: 1, // Adds some space between the avatar and the text
+      }}
+    >
+      {/* Add a small round avatar */}
+      <Avatar
+        sx={{ width: 32, height: 32 }}
+        alt={user.firstName}
+        src={user.avatarUrl} // Assuming user.avatarUrl contains the profile picture URL
+      />
+      {user.firstName}
+    </Button>
+    <Menu
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+      sx={{
+        color: "rgba(0, 0, 0, 0.9)", // Darker color for menu items
+      }}
+    >
+      <MenuItem 
+        onClick={() => {
+          handleClose(); // Close the menu
+          navigate("/profile"); // Navigate to the /profile route
+        }}
+        sx={{ color: "rgba(0, 0, 0, 0.9)" }} // Darker color for menu items
+      >
+        See Profile
+      </MenuItem>
+      <MenuItem 
+        onClick={handleLogout}
+        sx={{ color: "rgba(0, 0, 0, 0.9)" }} // Darker color for menu items
+      >
+        Logout
+      </MenuItem>
+    </Menu>
+  </>
+) : (
+            <>
+              <Link to={"/login"}>
+                <Button
+                  variant="text"
+                  sx={{
+                    color: "rgba(242, 242, 242, 0.7)",
+                    fontWeight: "medium",
+                    fontSize: "20px",
+                  }}
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Link to={"/signup"}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "primary.main",
+                    color: "black",
+                    fontWeight: "bold",
+                    borderRadius: "12px",
+                    textTransform: "none",
+                    fontSize: "20px",
+                  }}
+                >
+                  Join Now
+                </Button>
+              </Link>
+            </>
+          )}
         </Grid>
       </Grid>
 
@@ -209,35 +286,66 @@ function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Link to={"/login"} onClick={toggleMobileMenu}>
-            <Button
-              variant="text"
-              sx={{
-                color: "rgba(242, 242, 242, 0.7)",
-                fontWeight: "medium",
-                fontSize: "16px",
-                width: "100%",
-                textAlign: "center",
-              }}
-            >
-              Sign In
-            </Button>
-          </Link>
-          <Link to={"/signup"} onClick={toggleMobileMenu}>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "primary.main",
-                color: "black",
-                fontWeight: "bold",
-                borderRadius: "12px",
-                textTransform: "none",
-                width: "100%",
-              }}
-            >
-              Join Now
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Button
+                onClick={() => { toggleMobileMenu(); /* Navigate to profile */ }}
+                sx={{
+                  color: "rgba(242, 242, 242, 0.7)",
+                  fontWeight: "medium",
+                  fontSize: "16px",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                See Profile
+              </Button>
+              <Button
+                onClick={() => { toggleMobileMenu(); handleLogout(); }}
+                sx={{
+                  color: "rgba(242, 242, 242, 0.7)",
+                  fontWeight: "medium",
+                  fontSize: "16px",
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to={"/login"} onClick={toggleMobileMenu}>
+                <Button
+                  variant="text"
+                  sx={{
+                    color: "rgba(242, 242, 242, 0.7)",
+                    fontWeight: "medium",
+                    fontSize: "16px",
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Link to={"/signup"} onClick={toggleMobileMenu}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "primary.main",
+                    color: "black",
+                    fontWeight: "bold",
+                    borderRadius: "12px",
+                    textTransform: "none",
+                    width: "100%",
+                  }}
+                >
+                  Join Now
+                </Button>
+              </Link>
+            </>
+          )}
         </Grid>
       )}
 
