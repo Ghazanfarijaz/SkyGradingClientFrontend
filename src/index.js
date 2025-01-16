@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CardsProvider } from './api/CardsContext'; // Import the CardsProvider
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <CardsProvider> {/* Wrap App with CardsProvider */}
+      <App />
+    </CardsProvider>
   </React.StrictMode>
 );
 

@@ -959,408 +959,405 @@
 
 
 
-//////////////////// new addmore thing ///////////
+// //////////////////// new addmore thing ///////////
 
 
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  Typography,
-  Divider,
-} from "@mui/material";
-import { useAddCardMutation } from "../api/apiSlice"; // Import addCard mutation from API slice
-import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
-import { useGetCardByUserIdQuery } from "../api/apiSlice";
-import QRCode from "qrcode";
+// import React, { useState } from "react";
+// import {
+//   Box,
+//   Button,
+//   Checkbox,
+//   Container,
+//   Typography,
+//   Divider,
+// } from "@mui/material";
+// import { useAddCardMutation } from "../api/apiSlice"; // Import addCard mutation from API slice
+// import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
+// import { useGetCardByUserIdQuery } from "../api/apiSlice";
+// import QRCode from "qrcode";
 
-function PaymentCard() {
-  const { user, isAuthenticated } = useAuth();
-  console.log(user.id);
+// function PaymentCard() {
+//   const { user, isAuthenticated } = useAuth();
+//   console.log(user.id);
 
-  // Fetch cards for the authenticated user
-  const { data: cards = [], isLoading, error } = useGetCardByUserIdQuery(user?.id);
+//   // Fetch cards for the authenticated user
+//   const { data: cards = [], isLoading, error } = useGetCardByUserIdQuery(user?.id);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    set: "",
-    releaseYear: "",
-    cardNumber: "",
-    language: "",
-    label: "",
-    certificationNumber: "",
-    address: "",
-    userId: user.id,
-  });
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     set: "",
+//     releaseYear: "",
+//     cardNumber: "",
+//     language: "",
+//     label: "",
+//     certificationNumber: "",
+//     address: "",
+//     userId: user.id,
+//   });
 
-  const [cardsArray, setCardsArray] = useState([]); // State to store multiple cards
-  const [message, setMessage] = useState("");
-  const [responseMessage, setResponseMessage] = useState("");
-  const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
+//   const [cardsArray, setCardsArray] = useState([]); // State to store multiple cards
+//   const [message, setMessage] = useState("");
+//   const [responseMessage, setResponseMessage] = useState("");
+//   const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+//   // Handle input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
 
-  // Function to reset form fields
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      set: "",
-      releaseYear: "",
-      cardNumber: "",
-      language: "",
-      label: "",
-      certificationNumber: "",
-      address: "",
-      userId: user.id,
-    });
-  };
+//   // Function to reset form fields
+//   const resetForm = () => {
+//     setFormData({
+//       name: "",
+//       set: "",
+//       releaseYear: "",
+//       cardNumber: "",
+//       language: "",
+//       label: "",
+//       certificationNumber: "",
+//       address: "",
+//       userId: user.id,
+//     });
+//   };
 
-  // Generate QR code and add card to cardsArray
-  const addmore = async (e) => {
-    e.preventDefault();
+//   // Generate QR code and add card to cardsArray
+//   const addmore = async (e) => {
+//     e.preventDefault();
 
-    const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
+//     const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
 
-    // Basic validation
-    if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
-      setResponseMessage("All fields are required!");
-      return;
-    }
+//     // Basic validation
+//     if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
+//       setResponseMessage("All fields are required!");
+//       return;
+//     }
 
-    // Generate QR code for the card
-    const qrCodeUrl = await generateQRCode(cardNumber);
+//     // Generate QR code for the card
+//     const qrCodeUrl = await generateQRCode(cardNumber);
 
-    // Add the current form data and QR code to the cardsArray
-    const newCard = { ...formData, qrCodeUrl };
-    setCardsArray([...cardsArray, newCard]);
-    setResponseMessage("Card added to list!");
+//     // Add the current form data and QR code to the cardsArray
+//     const newCard = { ...formData, qrCodeUrl };
+//     setCardsArray([...cardsArray, newCard]);
+//     setResponseMessage("Card added to list!");
 
-    // Clear the form fields
-    resetForm();
-  };
+//     // Clear the form fields
+//     resetForm();
+//   };
 
-  // Generate QR code
-  const generateQRCode = async (cardNumber) => {
-    try {
-      const url = await QRCode.toDataURL(cardNumber, { errorCorrectionLevel: 'H' });
-      return url;
-    } catch (err) {
-      console.error("Error generating QR Code:", err);
-      return "";
-    }
-  };
+//   // Generate QR code
+//   const generateQRCode = async (cardNumber) => {
+//     try {
+//       const url = await QRCode.toDataURL(cardNumber, { errorCorrectionLevel: 'H' });
+//       return url;
+//     } catch (err) {
+//       console.error("Error generating QR Code:", err);
+//       return "";
+//     }
+//   };
 
-  // Handle form submission with API integration
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+//   // Handle form submission with API integration
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
 
-    // Submit all cards in the cardsArray to the database
-    try {
-      for (const card of cardsArray) {
-        await addCard(card);
-      }
-      setResponseMessage("All cards submitted successfully!");
-      setCardsArray([]); // Clear the cardsArray after submission
-    } catch (error) {
-      setResponseMessage(`Error: ${error.message}`);
-    }
-  };
+//     // Submit all cards in the cardsArray to the database
+//     try {
+//       for (const card of cardsArray) {
+//         await addCard(card);
+//       }
+//       setResponseMessage("All cards submitted successfully!");
+//       setCardsArray([]); // Clear the cardsArray after submission
+//     } catch (error) {
+//       setResponseMessage(`Error: ${error.message}`);
+//     }
+//   };
 
-  // Download QR code
-  const downloadQRCode = (qrCodeUrl, cardNumber) => {
-    const a = document.createElement("a");
-    a.href = qrCodeUrl;
-    a.download = `${cardNumber}_qr.png`;
-    a.click();
-  };
+//   // Download QR code
+//   const downloadQRCode = (qrCodeUrl, cardNumber) => {
+//     const a = document.createElement("a");
+//     a.href = qrCodeUrl;
+//     a.download = `${cardNumber}_qr.png`;
+//     a.click();
+//   };
 
-  return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1,
-        paddingLeft: { xs: 0, md: "32px" },
-        paddingRight: { xs: 0, md: "32px" },
-      }}
-    >
-      <Box
-        sx={{
-          width: "100%",
-          padding: 4,
-          borderRadius: 3,
-          margin: "0 auto",
-        }}
-      >
-        {/* Title */}
-        <Typography
-          variant="h1"
-          align="center"
-          gutterBottom
-          sx={{
-            color: "#FFFFFF",
-            fontWeight: "bold",
-            fontSize: "35px",
-            mb: 1.5,
-            letterSpacing: "3px",
-          }}
-        >
-          Submit Your Card Details For Grading
-        </Typography>
+//   return (
+//     <Container
+//       maxWidth="lg"
+//       sx={{
+//         minHeight: "100vh",
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//         zIndex: 1,
+//         paddingLeft: { xs: 0, md: "32px" },
+//         paddingRight: { xs: 0, md: "32px" },
+//       }}
+//     >
+//       <Box
+//         sx={{
+//           width: "100%",
+//           padding: 4,
+//           borderRadius: 3,
+//           margin: "0 auto",
+//         }}
+//       >
+//         {/* Title */}
+//         <Typography
+//           variant="h1"
+//           align="center"
+//           gutterBottom
+//           sx={{
+//             color: "#FFFFFF",
+//             fontWeight: "bold",
+//             fontSize: "35px",
+//             mb: 1.5,
+//             letterSpacing: "3px",
+//           }}
+//         >
+//           Submit Your Card Details For Grading
+//         </Typography>
 
-        <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+//         <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
 
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 1.5,
-              width: "100%",
-            }}
-          >
-            {/* Name and Set */}
-            <div className="w-full flex flex-col md:flex-row gap-5">
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Card Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Card name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Set</label>
-                <input
-                  type="text"
-                  name="set"
-                  placeholder="Enter your Set"
-                  value={formData.set}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-            </div>
+//         {/* Form */}
+//         <form onSubmit={handleSubmit}>
+//           <Box
+//             sx={{
+//               display: "flex",
+//               flexDirection: "column",
+//               gap: 1.5,
+//               width: "100%",
+//             }}
+//           >
+//             {/* Name and Set */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Card Name</label>
+//                 <input
+//                   type="text"
+//                   name="name"
+//                   placeholder="Enter Card name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Set</label>
+//                 <input
+//                   type="text"
+//                   name="set"
+//                   placeholder="Enter your Set"
+//                   value={formData.set}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//             </div>
 
-            {/* Release Year and Card Number */}
-            <div className="w-full flex flex-col md:flex-row gap-5">
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">
-                  Release Year
-                </label>
-                <input
-                  type="text"
-                  name="releaseYear"
-                  placeholder="Enter your Release Year"
-                  value={formData.releaseYear}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Card Number</label>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  placeholder="Enter your Card Number"
-                  value={formData.cardNumber}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-            </div>
+//             {/* Release Year and Card Number */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">
+//                   Release Year
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="releaseYear"
+//                   placeholder="Enter your Release Year"
+//                   value={formData.releaseYear}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Card Number</label>
+//                 <input
+//                   type="text"
+//                   name="cardNumber"
+//                   placeholder="Enter your Card Number"
+//                   value={formData.cardNumber}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//             </div>
 
-            {/* Language and Label */}
-            <div className="w-full flex flex-col md:flex-row gap-5">
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Language</label>
-                <input
-                  type="text"
-                  name="language"
-                  placeholder="Enter your Language"
-                  value={formData.language}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Label</label>
-                <input
-                  type="text"
-                  name="label"
-                  placeholder="Enter your Label"
-                  value={formData.label}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
-            </div>
+//             {/* Language and Label */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Language</label>
+//                 <input
+//                   type="text"
+//                   name="language"
+//                   placeholder="Enter your Language"
+//                   value={formData.language}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Label</label>
+//                 <input
+//                   type="text"
+//                   name="label"
+//                   placeholder="Enter your Label"
+//                   value={formData.label}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//             </div>
 
-            {/* Certification Number */}
-            <div className="w-full flex flex-col items-start gap-2">
-              <label className="text-[#F2F2F2] opacity-70">
-                Certification Number
-              </label>
-              <input
-                type="text"
-                name="certificationNumber"
-                placeholder="Enter your Certification Number"
-                value={formData.certificationNumber}
-                onChange={handleChange}
-                className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-              />
-            </div>
+//             {/* Certification Number */}
+//             <div className="w-full flex flex-col items-start gap-2">
+//               <label className="text-[#F2F2F2] opacity-70">
+//                 Certification Number
+//               </label>
+//               <input
+//                 type="text"
+//                 name="certificationNumber"
+//                 placeholder="Enter your Certification Number"
+//                 value={formData.certificationNumber}
+//                 onChange={handleChange}
+//                 className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//               />
+//             </div>
 
-            {/* Address */}
-            <div className="w-full flex flex-col items-start gap-2">
-              <label className="text-[#F2F2F2] opacity-70">Address</label>
-              <textarea
-                name="address"
-                placeholder="Enter your complete address for receiving the Card"
-                value={formData.address}
-                onChange={handleChange}
-                className="bg-transparent text-white w-full h-[150px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-              />
-            </div>
+//             {/* Address */}
+//             <div className="w-full flex flex-col items-start gap-2">
+//               <label className="text-[#F2F2F2] opacity-70">Address</label>
+//               <textarea
+//                 name="address"
+//                 placeholder="Enter your complete address for receiving the Card"
+//                 value={formData.address}
+//                 onChange={handleChange}
+//                 className="bg-transparent text-white w-full h-[150px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//               />
+//             </div>
 
-            {/* Terms Checkbox */}
-            <div className="flex items-center">
-              <Checkbox
-                size="medium"
-                sx={{
-                  borderRadius: 3,
-                  color: "#50A1FF",
-                  "&.Mui-checked": {
-                    color: "#50A1FF",
-                  },
-                }}
-              />
-              <p className="text-[#F2F2F2] opacity-70">
-                By clicking, you agree with our Terms & Conditions
-              </p>
-            </div>
+//             {/* Terms Checkbox */}
+//             <div className="flex items-center">
+//               <Checkbox
+//                 size="medium"
+//                 sx={{
+//                   borderRadius: 3,
+//                   color: "#50A1FF",
+//                   "&.Mui-checked": {
+//                     color: "#50A1FF",
+//                   },
+//                 }}
+//               />
+//               <p className="text-[#F2F2F2] opacity-70">
+//                 By clicking, you agree with our Terms & Conditions
+//               </p>
+//             </div>
 
-            {/* Add More Button */}
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{
-                bgcolor: "#50A1FF",
-                color: "Black",
-                textTransform: "none",
-                padding: "10px 0",
-                fontSize: "20px",
-                fontWeight: "bold",
-                "&:hover": { bgcolor: "#0277BD" },
-                borderRadius: 3,
-              }}
-              onClick={addmore}
-            >
-              Add More
-            </Button>
+//             {/* Add More Button */}
+//             <Button
+//               fullWidth
+//               variant="contained"
+//               sx={{
+//                 bgcolor: "#50A1FF",
+//                 color: "Black",
+//                 textTransform: "none",
+//                 padding: "10px 0",
+//                 fontSize: "20px",
+//                 fontWeight: "bold",
+//                 "&:hover": { bgcolor: "#0277BD" },
+//                 borderRadius: 3,
+//               }}
+//               onClick={addmore}
+//             >
+//               Add More
+//             </Button>
 
-            {/* Submit Button */}
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              sx={{
-                bgcolor: "#50A1FF",
-                color: "Black",
-                textTransform: "none",
-                padding: "10px 0",
-                fontSize: "20px",
-                fontWeight: "bold",
-                "&:hover": { bgcolor: "#0277BD" },
-                borderRadius: 3,
-              }}
-            >
-              Pay Now
-            </Button>
-          </Box>
-        </form>
+//             {/* Submit Button */}
+//             <Button
+//               fullWidth
+//               type="submit"
+//               variant="contained"
+//               sx={{
+//                 bgcolor: "#50A1FF",
+//                 color: "Black",
+//                 textTransform: "none",
+//                 padding: "10px 0",
+//                 fontSize: "20px",
+//                 fontWeight: "bold",
+//                 "&:hover": { bgcolor: "#0277BD" },
+//                 borderRadius: 3,
+//               }}
+//             >
+//               Pay Now
+//             </Button>
+//           </Box>
+//         </form>
 
-        {/* Response Message */}
-        {responseMessage && (
-          <Typography
-            align="center"
-            sx={{
-              mt: 2,
-              color: responseMessage.includes("successfully")
-                ? "#4CAF50"
-                : "#FF5252",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            {responseMessage}
-          </Typography>
-        )}
+//         {/* Response Message */}
+//         {responseMessage && (
+//           <Typography
+//             align="center"
+//             sx={{
+//               mt: 2,
+//               color: responseMessage.includes("successfully")
+//                 ? "#4CAF50"
+//                 : "#FF5252",
+//               fontSize: "16px",
+//               fontWeight: "bold",
+//             }}
+//           >
+//             {responseMessage}
+//           </Typography>
+//         )}
 
-        {/* Display QR Codes for All Cards */}
-        {cardsArray.length > 0 && (
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="h6" align="center" color="white" gutterBottom>
-              Generated QR Codes:
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 2,
-                justifyContent: "center",
-              }}
-            >
-              {cardsArray.map((card, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    textAlign: "center",
-                    border: "1px solid #ccc",
-                    borderRadius: 2,
-                    padding: 2,
-                  }}
-                >
-                  <Typography color="white">{card.name}</Typography>
-                  <img
-                    src={card.qrCodeUrl}
-                    alt={`QR Code for ${card.cardNumber}`}
-                    style={{ width: "150px", height: "150px", margin: "10px auto" }}
-                  />
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => downloadQRCode(card.qrCodeUrl, card.cardNumber)}
-                  >
-                    Download QR Code
-                  </Button>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
-      </Box>
-    </Container>
-  );
-}
+//         {/* Display QR Codes for All Cards */}
+//         {cardsArray.length > 0 && (
+//           <Box sx={{ mt: 4 }}>
+//             <Typography variant="h6" align="center" color="white" gutterBottom>
+//               Generated QR Codes:
+//             </Typography>
+//             <Box
+//               sx={{
+//                 display: "flex",
+//                 flexWrap: "wrap",
+//                 gap: 2,
+//                 justifyContent: "center",
+//               }}
+//             >
+//               {cardsArray.map((card, index) => (
+//                 <Box
+//                   key={index}
+//                   sx={{
+//                     textAlign: "center",
+//                     border: "1px solid #ccc",
+//                     borderRadius: 2,
+//                     padding: 2,
+//                   }}
+//                 >
+//                   <Typography color="white">{card.name}</Typography>
+//                   <img
+//                     src={card.qrCodeUrl}
+//                     alt={`QR Code for ${card.cardNumber}`}
+//                     style={{ width: "150px", height: "150px", margin: "10px auto" }}
+//                   />
+//                   <Button
+//                     variant="outlined"
+//                     color="primary"
+//                     onClick={() => downloadQRCode(card.qrCodeUrl, card.cardNumber)}
+//                   >
+//                     Download QR Code
+//                   </Button>
+//                 </Box>
+//               ))}
+//             </Box>
+//           </Box>
+//         )}
+//       </Box>
+//     </Container>
+//   );
+// }
 
-export default PaymentCard;
-
-
-
+// export default PaymentCard;
 
 
 
@@ -1372,7 +1369,10 @@ export default PaymentCard;
 
 
 
-//////////////////////
+
+
+
+////////////////////// payment good but not adding
 
 // import React, { useState } from "react";
 // import {
@@ -1387,12 +1387,14 @@ export default PaymentCard;
 // import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
 // import QRCode from "qrcode";
 // import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
+// import { useCards } from "../api/CardsContext"; // Import the useCards hook
 
 // // Load Stripe.js
 // const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
 
 // function PaymentCard() {
 //   const { user } = useAuth();
+  
 
 //   const [formData, setFormData] = useState({
 //     name: "",
@@ -1797,3 +1799,433 @@ export default PaymentCard;
 // }
 
 // export default PaymentCard;
+
+
+
+import React, { useState, useContext } from "react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Typography,
+  Divider,
+} from "@mui/material";
+import { useAddCardMutation } from "../api/apiSlice"; // Import addCard mutation from API slice
+import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
+import QRCode from "qrcode";
+import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
+import { useCards } from "../api/CardsContext"; // Import the useCards hook
+
+// Load Stripe.js
+const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
+
+function PaymentCard() {
+  const { user } = useAuth();
+  const { cardsArray, setCardsArray } = useCards(); // Use the context
+
+  const [formData, setFormData] = useState({
+    name: "",
+    set: "",
+    releaseYear: "",
+    cardNumber: "",
+    language: "",
+    label: "",
+    certificationNumber: "",
+    address: "",
+    userId: user.id,
+  });
+
+  const [responseMessage, setResponseMessage] = useState("");
+  const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
+  const [termsAgreed, setTermsAgreed] = useState(false); // State for terms agreement
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Function to reset form fields
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      set: "",
+      releaseYear: "",
+      cardNumber: "",
+      language: "",
+      label: "",
+      certificationNumber: "",
+      address: "",
+      userId: user.id,
+    });
+  };
+
+  // Generate QR code and add card to cardsArray
+  const addmore = async (e) => {
+    e.preventDefault();
+
+    const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
+
+    // Basic validation
+    if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
+      setResponseMessage("All fields are required!");
+      return;
+    }
+
+    // Generate QR code for the card
+    const qrCodeUrl = await generateQRCode(cardNumber);
+
+    // Add the current form data and QR code to the cardsArray
+    const newCard = { ...formData, qrCodeUrl };
+    setCardsArray([...cardsArray, newCard]);
+    setResponseMessage("Card added to list!");
+
+    // Clear the form fields
+    resetForm();
+  };
+
+  // Generate QR code
+  const generateQRCode = async (cardNumber) => {
+    try {
+      const url = await QRCode.toDataURL(cardNumber, { errorCorrectionLevel: 'H' });
+      return url;
+    } catch (err) {
+      console.error("Error generating QR Code:", err);
+      return "";
+    }
+  };
+
+  // Handle form submission with API integration
+// Inside the handleSubmit function
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!termsAgreed) {
+    setResponseMessage("You must agree to the terms and conditions.");
+    return;
+  }
+
+  if (cardsArray.length === 0) {
+    setResponseMessage("No cards added to submit.");
+    return;
+  }
+
+  // Step 1: Save the cardsArray to localStorage before redirecting to Stripe
+  localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
+
+  // Step 2: Call your backend to create a Checkout Session
+  try {
+    const response = await fetch('http://localhost:5000/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: 1000, // Example amount
+        currency: 'usd',
+        successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
+        cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
+      }),
+    });
+
+    const { id: sessionId } = await response.json();
+
+    // Step 3: Redirect to Stripe Checkout
+    const stripe = await stripePromise;
+    const { error } = await stripe.redirectToCheckout({ sessionId });
+
+    if (error) {
+      setResponseMessage(error.message);
+    }
+  } catch (error) {
+    setResponseMessage(`Error: ${error.message}`);
+  }
+};
+  // Download QR code
+  const downloadQRCode = (qrCodeUrl, cardNumber) => {
+    const a = document.createElement("a");
+    a.href = qrCodeUrl;
+    a.download = `${cardNumber}_qr.png`;
+    a.click();
+  };
+
+  return (
+    <Container
+      maxWidth="lg"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1,
+        paddingLeft: { xs: 0, md: "32px" },
+        paddingRight: { xs: 0, md: "32px" },
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          padding: 4,
+          borderRadius: 3,
+          margin: "0 auto",
+        }}
+      >
+        {/* Title */}
+        <Typography
+          variant="h1"
+          align="center"
+          gutterBottom
+          sx={{
+            color: "#FFFFFF",
+            fontWeight: "bold",
+            fontSize: "35px",
+            mb: 1.5,
+            letterSpacing: "3px",
+          }}
+        >
+          Submit Your Card Details For Grading
+        </Typography>
+
+        <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+        {/* Form */}
+        <form onSubmit={handleSubmit}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1.5,
+              width: "100%",
+            }}
+          >
+            {/* Name and Set */}
+            <div className="w-full flex flex-col md:flex-row gap-5">
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">Card Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter Card name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">Set</label>
+                <input
+                  type="text"
+                  name="set"
+                  placeholder="Enter your Set"
+                  value={formData.set}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+            </div>
+
+            {/* Release Year and Card Number */}
+            <div className="w-full flex flex-col md:flex-row gap-5">
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">
+                  Release Year
+                </label>
+                <input
+                  type="text"
+                  name="releaseYear"
+                  placeholder="Enter your Release Year"
+                  value={formData.releaseYear}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">Card Number</label>
+                <input
+                  type="text"
+                  name="cardNumber"
+                  placeholder="Enter your Card Number"
+                  value={formData.cardNumber}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+            </div>
+
+            {/* Language and Label */}
+            <div className="w-full flex flex-col md:flex-row gap-5">
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">Language</label>
+                <input
+                  type="text"
+                  name="language"
+                  placeholder="Enter your Language"
+                  value={formData.language}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+                <label className="text-[#F2F2F2] opacity-70">Label</label>
+                <input
+                  type="text"
+                  name="label"
+                  placeholder="Enter your Label"
+                  value={formData.label}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                />
+              </div>
+            </div>
+
+            {/* Certification Number */}
+            <div className="w-full flex flex-col items-start gap-2">
+              <label className="text-[#F2F2F2] opacity-70">
+                Certification Number
+              </label>
+              <input
+                type="text"
+                name="certificationNumber"
+                placeholder="Enter your Certification Number"
+                value={formData.certificationNumber}
+                onChange={handleChange}
+                className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+              />
+            </div>
+
+            {/* Address */}
+            <div className="w-full flex flex-col items-start gap-2">
+              <label className="text-[#F2F2F2] opacity-70">Address</label>
+              <textarea
+                name="address"
+                placeholder="Enter your complete address for receiving the Card"
+                value={formData.address}
+                onChange={handleChange}
+                className="bg-transparent text-white w-full h-[150px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+              />
+            </div>
+
+            {/* Terms Checkbox */}
+            <div className="flex items-center">
+              <Checkbox
+                size="medium"
+                checked={termsAgreed}
+                onChange={(e) => setTermsAgreed(e.target.checked)}
+                sx={{
+                  borderRadius: 3,
+                  color: "#50A1FF",
+                  "&.Mui-checked": {
+                    color: "#50A1FF",
+                  },
+                }}
+              />
+              <p className="text-[#F2F2F2] opacity-70">
+                By clicking, you agree with our Terms & Conditions
+              </p>
+            </div>
+
+            {/* Add More Button */}
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{
+                bgcolor: "#50A1FF",
+                color: "Black",
+                textTransform: "none",
+                padding: "10px 0",
+                fontSize: "20px",
+                fontWeight: "bold",
+                "&:hover": { bgcolor: "#0277BD" },
+                borderRadius: 3,
+              }}
+              onClick={addmore}
+            >
+              Add More
+            </Button>
+
+            {/* Submit Button */}
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              sx={{
+                bgcolor: "#50A1FF",
+                color: "Black",
+                textTransform: "none",
+                padding: "10px 0",
+                fontSize: "20px",
+                fontWeight: "bold",
+                "&:hover": { bgcolor: "#0277BD" },
+                borderRadius: 3,
+              }}
+              disabled={!termsAgreed || cardsArray.length === 0}
+            >
+              Pay Now
+            </Button>
+          </Box>
+        </form>
+
+        {/* Response Message */}
+        {responseMessage && (
+          <Typography
+            align="center"
+            sx={{
+              mt: 2,
+              color: responseMessage.includes("successfully")
+                ? "#4CAF50"
+                : "#FF5252",
+              fontSize: "16px",
+              fontWeight: "bold",
+            }}
+          >
+            {responseMessage}
+          </Typography>
+        )}
+
+        {/* Display QR Codes for All Cards */}
+        {cardsArray.length > 0 && (
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" align="center" color="white" gutterBottom>
+              Generated QR Codes:
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 2,
+                justifyContent: "center",
+              }}
+            >
+              {cardsArray.map((card, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    textAlign: "center",
+                    border: "1px solid #ccc",
+                    borderRadius: 2,
+                    padding: 2,
+                  }}
+                >
+                  <Typography color="white">{card.name}</Typography>
+                  <img
+                    src={card.qrCodeUrl}
+                    alt={`QR Code for ${card.cardNumber}`}
+                    style={{ width: "150px", height: "150px", margin: "10px auto" }}
+                  />
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => downloadQRCode(card.qrCodeUrl, card.cardNumber)}
+                  >
+                    Download QR Code
+                  </Button>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        )}
+      </Box>
+    </Container>
+  );
+}
+
+export default PaymentCard;
