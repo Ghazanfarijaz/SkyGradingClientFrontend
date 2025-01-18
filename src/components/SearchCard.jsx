@@ -30,78 +30,6 @@ import { Html5Qrcode } from "html5-qrcode";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
 
-const cards = [
-  {
-    id: "189824",
-    name: "Harry Kane",
-    set: "Donruss Soccer",
-    releaseYear: "2022-23",
-    number: "28",
-    language: "English",
-    rarity: "High",
-    grade: "7",
-    subgrades: { surface: 5, edges: 6, centering: 6, corners: 4 },
-    label: "Optic",
-    certificationNo: "189824",
-    img: card1,
-  },
-  {
-    id: "123456",
-    name: "Lionel Messi",
-    set: "FIFA Stars",
-    releaseYear: "2021-22",
-    number: "29",
-    language: "English",
-    rarity: "Rare",
-    grade: "10",
-    subgrades: { surface: 9, edges: 10, centering: 10, corners: 9 },
-    label: "Premium",
-    certificationNo: "123456",
-    img: card1,
-  },
-  {
-    id: "123456",
-    name: "Lionel Messi",
-    set: "FIFA Stars",
-    releaseYear: "2021-22",
-    number: "29",
-    language: "English",
-    rarity: "Rare",
-    grade: "10",
-    subgrades: { surface: 9, edges: 10, centering: 10, corners: 9 },
-    label: "Premium",
-    certificationNo: "123456",
-    img: card1,
-  },
-  {
-    id: "123456",
-    name: "Lionel Messi",
-    set: "FIFA Stars",
-    releaseYear: "2021-22",
-    number: "29",
-    language: "English",
-    rarity: "Rare",
-    grade: "10",
-    subgrades: { surface: 9, edges: 10, centering: 10, corners: 9 },
-    label: "Premium",
-    certificationNo: "123456",
-    img: card1,
-  },
-  {
-    id: "123456",
-    name: "Lionel Messi",
-    set: "FIFA Stars",
-    releaseYear: "2021-22",
-    number: "29",
-    language: "English",
-    rarity: "Rare",
-    grade: "10",
-    subgrades: { surface: 9, edges: 10, centering: 10, corners: 9 },
-    label: "Premium",
-    certificationNo: "123456",
-    img: card1,
-  },
-];
 
 export default function SearchCard() {
   const swiperRef = useRef(null);
@@ -111,6 +39,7 @@ export default function SearchCard() {
   const [showCards, setShowCards] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [scannerActive, setScannerActive] = useState(false);  // Track scanner state
+  const [mockCards, setMockCards] = useState(null);
 
   const qrReaderRef = useRef(null);
   const readerRef = useRef(null); 
@@ -135,6 +64,25 @@ export default function SearchCard() {
   });
 
   console.log("cardData => ", cardData);
+
+  useEffect(() => {
+    if (cardData?.image) {
+      // Create a mock array of cards with the same image from cardData
+      const mockCards = [
+        { id: "189824", img: cardData.image },
+        { id: "123456", img: cardData.image },
+        { id: "123456", img: cardData.image },
+        { id: "123456", img: cardData.image },
+        { id: "123456", img: cardData.image },
+      ];
+
+      // Update the state with the mock cards
+      setMockCards(mockCards);
+    }
+  }, [cardData]); // Run this effect whenever cardData changes
+
+
+
 
   //==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
@@ -406,7 +354,7 @@ export default function SearchCard() {
             onSwiper={(swiper) => (swiperRef.current = swiper)} // Properly initialize swiperRef
             sx={{ mb: 8 }}
           >
-            {cards.map((card, index) => (
+            {mockCards.map((card, index) => (
               <SwiperSlide key={index}>
                 <img src={card.img} alt={card.name} />
               </SwiperSlide>
@@ -799,7 +747,7 @@ export default function SearchCard() {
         </>
       )}
 
-      {selectedCard && (
+      {/* {selectedCard && (
         <div>
           <h3>{selectedCard.name}</h3>
           <p>
@@ -835,7 +783,7 @@ export default function SearchCard() {
             </li>
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

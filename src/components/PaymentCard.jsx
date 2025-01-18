@@ -1916,7 +1916,7 @@ const handleSubmit = async (e) => {
 
   // Step 2: Call your backend to create a Checkout Session
   try {
-    const response = await fetch('http://localhost:5000/create-checkout-session', {
+    const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

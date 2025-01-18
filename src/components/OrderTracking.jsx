@@ -208,43 +208,50 @@ const OrderTracking = ({ setIsTracking }) => {
     { skip: !trackingNumber } // Skip query if trackingNumber is not provided
   );
 
-    const handleTrackOrder = () => {
-      var checkSET = null
+  console.log("here is the carddata " , cardData)
+  console.log("here is the ", cardData.trackingStatus )
+
+  const handleTrackOrder = () => {
+    if (!trackingNumber) {
+      alert("Please enter a tracking number!");
+      return;
+    }
+  
     if (cardData) {
-      // Set the fetched card data to state
-      if(cardData.trackingStatus == "completed"){
-
-        checkSET = 3
-
-      }else if(cardData.trackingStatus == "inprogress"){
-
-        checkSET = 2
-
-      }else if (cardData.trackingStatus == "pending"){
-
-        checkSET = 1
-
-
-      }else {
-        checkSET = 0
-
+      let checkSET = -1; // Default value if none of the conditions match
+  
+      switch (cardData.trackingStatus) {
+        case "confirmed":
+          checkSET = 0;
+          break;
+        case "shipped":
+          checkSET = 1;
+          break;
+        case "checking":
+          checkSET = 2;
+          break;
+        case "delivered":
+          checkSET = 4;
+          break;
+        default:
+          checkSET = -1; // Fallback for unknown status
       }
+  
       setOrderData({
         id: cardData?.id,
         name: cardData?.name,
         cardNumber: cardData?.cardNumber,
         cost: cardData?.cost,
         orderDate: cardData?.createdAt,
-        deliveryDate: cardData?.updatedAt ,
-        steps:   [
+        deliveryDate: cardData?.updatedAt,
+        steps: [
           { label: "Order Confirmed", date: cardData?.updatedAt },
-          { label: "Shipped", date: cardData?.updatedAt  },
-          { label: "Checking", date: cardData?.updatedAt  },
-          { label: "Delivered", date: cardData?.updatedAt  },
+          { label: "Shipped", date: cardData?.updatedAt },
+          { label: "Checking", date: cardData?.updatedAt },
+          { label: "Delivered", date: cardData?.updatedAt },
         ],
-        currentStep: checkSET || 2,
+        currentStep: checkSET,
       });
-      // setIsModalOpen(true); // Open the modal
       setIsTracking(true);
     } else {
       alert("Order not found!");
