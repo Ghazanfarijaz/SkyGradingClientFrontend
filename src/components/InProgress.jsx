@@ -203,7 +203,7 @@ export default function InProgress() {
   }
 
   // Filter cards with trackingStatus === 'inprogress'
-  const inProgressCards = cards.filter((card) => card.trackingStatus === "inprogress" || card.trackingStatus === "N/A");
+  const inProgressCards = cards.filter((card) => card.trackingStatus === "confirmed" || card.trackingStatus === "checking" || card.trackingStatus === "shipped" || card.trackingStatus === "N/A");
   console.log("trackingStatus => ", inProgressCards);
 
   return (

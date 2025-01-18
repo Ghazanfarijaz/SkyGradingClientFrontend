@@ -209,7 +209,7 @@ const OrderTracking = ({ setIsTracking }) => {
   );
 
   console.log("here is the carddata " , cardData)
-  console.log("here is the ", cardData.trackingStatus )
+  console.log("here is the ", cardData?.trackingStatus )
 
   const handleTrackOrder = () => {
     if (!trackingNumber) {
@@ -243,6 +243,7 @@ const OrderTracking = ({ setIsTracking }) => {
         cardNumber: cardData?.cardNumber,
         cost: cardData?.cost,
         orderDate: cardData?.createdAt,
+        image: cardData?.image,
         deliveryDate: cardData?.updatedAt,
         steps: [
           { label: "Order Confirmed", date: cardData?.updatedAt },
@@ -346,7 +347,7 @@ const OrderTracking = ({ setIsTracking }) => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <img
-                src={image}
+                src={orderData.image}
                 alt="Product"
                 style={{ width: "100px", height: "100px" }}
               />

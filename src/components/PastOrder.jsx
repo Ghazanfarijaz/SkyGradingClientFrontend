@@ -276,7 +276,7 @@ export default function PastOrder() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filter cards with trackingStatus === 'completed'
-  const pastOrders = cards.filter((card) => card.trackingStatus === "completed");
+  const pastOrders = cards.filter((card) => card.trackingStatus === "delivered");
   console.log("pastOrders => ", pastOrders);
 
   // Calculate the total number of pages based on filtered data
