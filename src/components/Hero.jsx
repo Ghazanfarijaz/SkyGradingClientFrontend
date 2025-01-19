@@ -121,11 +121,11 @@ function Hero() {
       <Typography
         sx={{
           color: "white",
-          fontSize: { md: "48px", xs: "32px" },
+          fontSize: { md: "80px", xs: "32px" },
           fontWeight: "bold",
           textAlign: "center",
           mt: "4vh",
-          letterSpacing: "1px", // Add letter spacing
+          letterSpacing: "3px", // Add letter spacing
           zIndex: 1,
         }}
       >
