@@ -1810,6 +1810,10 @@ import {
   Container,
   Typography,
   Divider,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { useAddCardMutation } from "../api/apiSlice"; // Import addCard mutation from API slice
 import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
@@ -1817,12 +1821,14 @@ import QRCode from "qrcode";
 import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
 import { useCards } from "../api/CardsContext"; // Import the useCards hook
 
+
 // Load Stripe.js
 const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
 
 function PaymentCard() {
   const { user } = useAuth();
   const { cardsArray, setCardsArray } = useCards(); // Use the context
+  const [selectedAmount, setSelectedAmount] = useState(250); // Default amount
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1845,6 +1851,13 @@ function PaymentCard() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+    // Handle amount selection
+    const handleAmountChange = (e) => {
+      setSelectedAmount(e.target.value);
+    };
+
+
 
   // Function to reset form fields
   const resetForm = () => {
@@ -1920,7 +1933,7 @@ const handleSubmit = async (e) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: 1000, // Example amount
+        amount: selectedAmount * 100, // Example amount
         currency: 'usd',
         successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
         cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
@@ -2141,6 +2154,40 @@ const handleSubmit = async (e) => {
             >
               Add More
             </Button>
+
+            <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+{/* Form */}
+<form onSubmit={handleSubmit}>
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 1.5,
+      width: "100%",
+      
+    }}
+    
+  >
+    {/* Amount Dropdown */}
+    <FormControl fullWidth sx={{ mb: 2, bgcolor: "#7D7A7A", }} 
+     disabled={!termsAgreed || cardsArray.length === 0}
+    >
+      <InputLabel id="amount-label" sx={{ color: "#ffffff", }}>Select Amount</InputLabel>
+      <Select
+        labelId="amount-label"
+        value={selectedAmount}
+        label="Select Amount"
+        onChange={handleAmountChange}
+        sx={{ color: "#ffffff", }}
+      >
+        <MenuItem value={250}>$250</MenuItem>
+        <MenuItem value={500}>$500</MenuItem>
+        <MenuItem value={1000}>$1000</MenuItem>
+      </Select>
+    </FormControl>
+    </Box>
+    </form>
 
             {/* Submit Button */}
             <Button
