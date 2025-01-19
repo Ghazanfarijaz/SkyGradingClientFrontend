@@ -169,41 +169,65 @@ const handleScanSuccess = (decodedText) => {
     <div className="min-h-[100vh] bg-transparent text-white flex flex-col items-center pt-28">
       {/* Search Section */}
       <div className="w-full max-w-8xl mb-8 px-4">
-        <div className="flex flex-wrap gap-4 items-center justify-center">
-          <TextField
-            variant="outlined"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Enter card number..."
-            sx={{
-              width: "100%",
-              maxWidth: "600px",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "50px",
-                background: "transparent",
-                border: "2px solid transparent",
-                backgroundImage: "linear-gradient(#000, #000), linear-gradient(90deg, #ffffff, #02CCFE)",
-                backgroundOrigin: "border-box",
-                backgroundClip: "content-box, border-box",
-                "& input": {
-                  color: "#FFFFFF",
-                  textAlign: "center",
-                },
-              },
-            }}
-          />
-          <div className="flex gap-4 items-center justify-center md:justify-between">
-            <button onClick={handleSearch} className="custom-button md:px-4 xs:px-0 py-2 text-sm md:text-base">
-              Search
-            </button>
-            <button onClick={handleRandomCard} className="custom-button px-4 py-2 text-sm md:text-base">
-              Random Card
-            </button>
-            <button onClick={startScanning} className="custom-button px-4 py-2 text-sm md:text-base">
-              {isScanning ? "Scanning..." : "Scan QR Code"}
-            </button>
-          </div>
-        </div>
+      <div className="w-full max-w-8xl mb-8 px-4">
+  <div className="flex flex-wrap gap-4 items-center justify-center">
+    {/* TextField */}
+    <TextField
+      variant="outlined"
+      value={searchInput}
+      onChange={(e) => setSearchInput(e.target.value)}
+      placeholder="Enter card number..."
+      sx={{
+        width: "100%",
+        maxWidth: "600px", // Restricts the max width of the input
+        "& .MuiOutlinedInput-root": {
+          borderRadius: "50px",
+          background: "transparent",
+          border: "2px solid transparent",
+          backgroundImage:
+            "linear-gradient(#000, #000), linear-gradient(90deg, #ffffff, #02CCFE)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "content-box, border-box",
+          "& input": {
+            color: "#FFFFFF",
+            textAlign: "center",
+          },
+        },
+      }}
+    />
+    <div className="flex gap-4 items-center justify-center md:justify-between flex-col md:flex-row">
+      {/* Search Button */}
+      <button
+        onClick={handleSearch}
+        className="custom-button md:px-4 px-2 py-2 text-sm md:text-base w-full md:w-auto"
+      >
+        Search
+      </button>
+
+      {/* Random Card Button */}
+      <button
+        onClick={handleRandomCard}
+        className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
+      >
+        Random Card
+      </button>
+      <button
+        onClick={startScanning}
+        className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
+      >
+        {isScanning ? "Scanning..." : "Scan QR Code"}
+      </button>
+    </div>
+  </div>
+</div>
+{/* QR Scanner */}
+{/* {isScanning && (
+  <div
+    id="reader"
+    ref={readerRef}  // Attach the ref to the div
+    style={{ width: "300px", height: "300px" }}
+  ></div>
+)} */}
       </div>
 
       {/* QR Scanner */}
