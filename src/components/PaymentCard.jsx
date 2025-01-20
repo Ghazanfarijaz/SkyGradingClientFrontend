@@ -1933,7 +1933,7 @@ const handleSubmit = async (e) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: selectedAmount * 100, // Example amount
+        amount: selectedAmount , // Example amount
         currency: 'usd',
         successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
         cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
