@@ -12,6 +12,7 @@ import SubmitCard from "./pages/SubmitCard";
 import Search from "./pages/Search";
 import ProfilePage from "./pages/ProfilePage";
 import Tracking from "./pages/Tracking";
+import PricingPage from "./components/PricingPage";
 
 import { Provider } from "react-redux"; // Import Provider from react-redux
 import store from "./api/store";
@@ -64,7 +65,7 @@ function App() {
                 path="/pricing"
                 element={
                   <Layout>
-                    <Pricing />
+                    <PricingPage />
                   </Layout>
                 }
               />

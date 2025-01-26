@@ -9,6 +9,7 @@ import { useGetCardByCardNumberQuery, useGetAllCardsQuery } from "../api/apiSlic
 import { Html5Qrcode } from "html5-qrcode";
 import GradientAreaChart from "./GradientGraph";
 import triangle from "../assets/triangle.png";
+import Hero from "./Hero";
 
 export default function SearchCard() {
   const swiperRef = useRef(null);
@@ -167,6 +168,7 @@ const handleScanSuccess = (decodedText) => {
   };
   return (
     <div className="min-h-[100vh] bg-transparent text-white flex flex-col items-center pt-28">
+       <Hero />
       {/* Search Section */}
       <div className="w-full max-w-8xl mb-8 px-4">
       <div className="w-full max-w-8xl mb-8 px-4">

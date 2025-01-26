@@ -15,7 +15,7 @@ function Home() {
       <div className="bg-[#1A1A1A] relative min-h-[100vh]">
         <Hero />
 
-        <Box
+        {/* <Box
           sx={{
             width: "100%", // 100% of the viewport width
             height: { md: "100vh", xs: "50vh" }, // 100% of the viewport height
@@ -36,7 +36,7 @@ function Home() {
               left: 0,
             }}
           />
-        </Box>
+        </Box> */}
         <StaticImageSlider />
         <ServicesSection />
         <SlidingCards />

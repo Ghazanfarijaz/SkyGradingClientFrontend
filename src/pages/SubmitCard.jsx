@@ -7,7 +7,7 @@ import PaymentCard from "../components/PaymentCard";
 function SubmitCard() {
   return (
     <div className=" relative min-h-[100vh]">
-      <Hero />
+      {/* <Hero /> */}
 
       <Container
         maxWidth="xl"

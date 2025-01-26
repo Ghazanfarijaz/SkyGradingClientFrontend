@@ -42,7 +42,7 @@ const StaticImageSlider = () => {
         alignItems: "center",
         flexDirection: { xs: "column-reverse", md: "row" },
         width: "100%",
-        height: { md: "150vh", xs: "150vh" },
+        height: { md: "120vh", xs: "150vh" },
         backgroundColor: "transparent",
         color: "#FFFFFF",
         overflow: "hidden",

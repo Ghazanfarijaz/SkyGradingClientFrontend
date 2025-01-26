@@ -304,9 +304,9 @@ function Signup() {
                 <MenuItem disabled value="">
                   <em>Country</em>
                 </MenuItem>
-                <MenuItem value="USA">United States</MenuItem>
-                <MenuItem value="UK">United Kingdom</MenuItem>
-                <MenuItem value="Canada">Canada</MenuItem>
+                <MenuItem value="Australia">Australia</MenuItem>
+                {/* <MenuItem value="UK">United Kingdom</MenuItem>
+                <MenuItem value="Canada">Canada</MenuItem> */}
               </Select>
 
               <Button
