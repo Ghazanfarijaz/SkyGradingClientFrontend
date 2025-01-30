@@ -1824,11 +1824,16 @@ import { useCards } from "../api/CardsContext"; // Import the useCards hook
 
 // Load Stripe.js
 const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
+const labelValues = {
+  "Standard Label": 0.0, // Free/Card
+  "Type Match Label": 2.49, // AU$2.49/Card
+  "Sky Label": 5.49, // AU$5.49/Card
+};
 
 function PaymentCard() {
   const { user } = useAuth();
   const { cardsArray, setCardsArray } = useCards(); // Use the context
-  const [selectedAmount, setSelectedAmount] = useState(250); // Default amount
+  const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1924,16 +1929,23 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  // Step 1: Save the cardsArray to localStorage before redirecting to Stripe
+  // Step 1: Calculate the total amount
+  let totalAmount = selectedAmount;
+  cardsArray.forEach((card) => {
+    const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
+    totalAmount += labelValue; // Add the label value to the total amount
+  });
+
+  // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
   localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
 
-  // Step 2: Call your backend to create a Checkout Session
+  // Step 3: Call your backend to create a Checkout Session
   try {
     const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        amount: selectedAmount , // Example amount
+        amount: totalAmount , // Convert to cents (Stripe expects amounts in cents)
         currency: 'usd',
         successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
         cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
@@ -1942,7 +1954,7 @@ const handleSubmit = async (e) => {
 
     const { id: sessionId } = await response.json();
 
-    // Step 3: Redirect to Stripe Checkout
+    // Step 4: Redirect to Stripe Checkout
     const stripe = await stripePromise;
     const { error } = await stripe.redirectToCheckout({ sessionId });
 
@@ -2078,16 +2090,23 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Label</label>
-                <input
-                  type="text"
-                  name="label"
-                  placeholder="Enter your Label"
-                  value={formData.label}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
-              </div>
+  <label className="text-[#F2F2F2] opacity-70">Label</label>
+  <select
+    name="label"
+    value={formData.label}
+    onChange={handleChange}
+    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
+    style={{
+      backgroundColor: '#1E1E1E', // Dark background for the dropdown
+      color: '#F2F2F2', // Light text color
+    }}
+  >
+    <option value="" disabled className="bg-black text-white">Select a label</option>
+    <option value="Standard Label" className="bg-black text-white hover:bg-gray-800">Standard Label</option>
+    <option value="Type Match Label" className="bg-black text-white hover:bg-gray-800">Type Match Label</option>
+    <option value="Sky Label" className="bg-black text-white hover:bg-gray-800">Sky Label</option>
+  </select>
+</div>
             </div>
 
             {/* Certification Number */}
@@ -2181,9 +2200,10 @@ const handleSubmit = async (e) => {
         onChange={handleAmountChange}
         sx={{ color: "#ffffff", }}
       >
-        <MenuItem value={250}>$250</MenuItem>
-        <MenuItem value={500}>$500</MenuItem>
-        <MenuItem value={1000}>$1000</MenuItem>
+        <MenuItem value={19.99}>$Basic</MenuItem>
+        <MenuItem value={24.49}>$Standard</MenuItem>
+        <MenuItem value={50.00}>$Premier</MenuItem>
+        <MenuItem value={250.00}>$VIP</MenuItem>
       </Select>
     </FormControl>
     </Box>
@@ -2270,6 +2290,10 @@ const handleSubmit = async (e) => {
             </Box>
           </Box>
         )}
+
+<Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
+  Total Amount: AU${(selectedAmount + cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0)).toFixed(2)}
+</Typography>
       </Box>
     </Container>
   );

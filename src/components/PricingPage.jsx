@@ -7,7 +7,9 @@ const PricingPage = () => {
   const [currency, setCurrency] = useState("GBP");
   const [activeTab, setActiveTab] = useState("grading");
 
-  const currencySymbol = currency === "GBP" ? "£" : "$";
+  // const currencySymbol = currency === "GBP" ? "£" : "AU$";
+  const currencySymbol = "AU$";
+
   const yearlyDiscount = 0.8; // 20% discount
 
   const tabs = [
@@ -69,12 +71,12 @@ const PricingPage = () => {
     <div className="min-h-screen bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold mb-8">Choose A Plan That Fits</h1>
+        <div className="text-center mb-10 mt-5">
+          <h1 className="text-4xl md:text-5xl font-bold mb-8">Label Pricing</h1>
           
           {/* Billing Toggle */}
-          <div className="flex items-center justify-center gap-4">
-            <span className="text-lg">Monthly</span>
+          {/* <div className="flex items-center justify-center gap-4">
+            <span className="text-lg">Per Card</span>
             <button
               onClick={() => setIsYearly(!isYearly)}
               className="relative inline-flex h-6 w-11 items-center rounded-full bg-[#D4AF37] transition-colors focus:outline-none"
@@ -89,7 +91,7 @@ const PricingPage = () => {
             {isYearly && (
               <span className="text-[#D4AF37] ml-2">Save up to 20%!</span>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Currency Selector */}
@@ -99,7 +101,7 @@ const PricingPage = () => {
             onChange={(e) => setCurrency(e.target.value)}
             className="bg-gray-800 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
           >
-            <option value="GBP">GBP (£)</option>
+            <option value="AU$">AU$ (AU$)</option>
             <option value="USD">USD ($)</option>
           </select>
         </div>
@@ -113,7 +115,7 @@ const PricingPage = () => {
               className={`${card.background} rounded-xl p-8 shadow-xl transition-all`}
             >
               <h3 className="text-2xl font-bold mb-4">{card.title}</h3>
-              <p className="text-4xl font-bold mb-6">{isYearly ? `${card.price}/yr` : `${card.price}/mo`}</p>
+              <p className="text-4xl font-bold mb-6">{`${card.price}/Card`}</p>
               <ul className="space-y-3">
                 {card.features.map((feature, idx) => (
                   <li key={idx} className="flex items-center gap-2">
@@ -125,10 +127,12 @@ const PricingPage = () => {
             </motion.div>
           ))}
         </div>
-
+        <div className="text-center mb-10 mt-5">
+        <h1 className="text-4xl md:text-5xl font-bold mb-8">Service Pricing</h1>
+        </div>
         {/* Feature Tabs */}
         <div className="mb-16">
-          <div className="flex space-x-4 border-b border-gray-700 mb-8">
+          {/* <div className="flex space-x-4 border-b border-gray-700 mb-8">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -142,41 +146,67 @@ const PricingPage = () => {
                 {tab.label}
               </button>
             ))}
-          </div>
+          </div> */}
 
-          {/* Service Pricing Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-800 sticky top-0">
-                <tr>
-                  <th className="px-6 py-4 text-left">Service Tier</th>
-                  <th className="px-6 py-4 text-left">Price per Card</th>
-                  <th className="px-6 py-4 text-left">Turnaround Time</th>
-                  <th className="px-6 py-4 text-left">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {serviceTiers.map((tier, index) => (
-                  <tr key={index} className={index % 2 === 0 ? "bg-gray-800" : "bg-gray-900"}>
-                    <td className="px-6 py-4">{tier.name}</td>
-                    <td className="px-6 py-4">
-                      {currencySymbol}
-                      {isYearly
-                        ? (tier.price * yearlyDiscount).toFixed(2)
-                        : tier.price.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4">{tier.turnaround}</td>
-                    <td className="px-6 py-4">
-                      <button className="bg-[#D4AF37] text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors">
-                        Select
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+{/* Service Pricing Table */}
+<div className="overflow-x-auto">
+  <table className="w-full">
+    <thead className="bg-gray-800 sticky top-0">
+      <tr>
+        <th className="px-6 py-4 text-left">Service Details</th>
+        {serviceTiers.map((tier, index) => (
+          <th key={index} className="px-6 py-4 text-left">
+            {tier.name}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td className="px-6 py-4">Price per Card</td>
+        {serviceTiers.map((tier, index) => (
+          <td key={index} className="px-6 py-4">
+            {currencySymbol}
+            {isYearly
+              ? (tier.price * yearlyDiscount).toFixed(2)
+              : tier.price.toFixed(2)}
+          </td>
+        ))}
+      </tr>
+      <tr>
+        <td className="px-6 py-4">Turnaround Time</td>
+        {serviceTiers.map((tier, index) => (
+          <td key={index} className="px-6 py-4">{tier.turnaround}</td>
+        ))}
+      </tr>
+      <tr>
+        <td className="px-6 py-4">Features</td>
+        {serviceTiers.map((tier, index) => (
+          <td key={index} className="px-6 py-4">
+            {tier.features.map((feature, i) => (
+              <span key={i} className="block">
+                {feature ? <FaCheck className="text-[#D4AF37]" /> : <FaTimes className="text-red-500" />}
+              </span>
+            ))}
+          </td>
+        ))}
+      </tr>
+      <tr>
+        {/* <td className="px-6 py-4">Action</td>
+        {serviceTiers.map((tier, index) => (
+          <td key={index} className="px-6 py-4">
+            <button className="bg-[#D4AF37] text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors">
+              Select
+            </button>
+          </td>
+        ))} */}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
         </div>
+        
 
         {/* Payment Note */}
         <div className="text-center text-gray-400 mt-8">
