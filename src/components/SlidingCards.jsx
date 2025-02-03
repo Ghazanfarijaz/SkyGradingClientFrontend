@@ -128,7 +128,7 @@ const SlidingCards = () => {
       {/* Text Below Cards */}
       <Typography
         variant="h4"
-        sx={{
+        sx={{ 
           marginTop: 5,
           marginBottom: 2,
           textAlign: "center",

@@ -45,24 +45,28 @@ const PricingPage = () => {
       name: "Basic",
       price: 19.99,
       turnaround: "20 Buisness days",
+      insurance: "AU$ 200",
       features: [true, true, false, false, false]
     },
     {
       name: "Standard",
       price: 24.49,
       turnaround: "10 Buisness days",
+      insurance: "AU$ 400",
       features: [true, true, true, false, false]
     },
     {
       name: "Premier",
       price: 50,
       turnaround: "5 Buisness days",
+      insurance: "AU$ 1000",
       features: [true, true, true, true, false]
     },
     {
       name: "VIP",
       price: 250,
       turnaround: "5 Buisness days",
+      insurance: "AU$ 5000",
       features: [true, true, true, true, true]
     }
   ];
@@ -177,6 +181,12 @@ const PricingPage = () => {
         <td className="px-6 py-4">Turnaround Time</td>
         {serviceTiers.map((tier, index) => (
           <td key={index} className="px-6 py-4">{tier.turnaround}</td>
+        ))}
+      </tr>
+      <tr>
+        <td className="px-6 py-4">Insurance</td>
+        {serviceTiers.map((tier, index) => (
+          <td key={index} className="px-6 py-4">{tier.insurance}</td>
         ))}
       </tr>
       <tr>
