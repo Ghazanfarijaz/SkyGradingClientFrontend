@@ -106,7 +106,7 @@ const PricingPage = () => {
             className="bg-gray-800 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
           >
             <option value="AU$">AU$ (AU$)</option>
-            <option value="USD">USD ($)</option>
+            {/* <option value="USD">USD ($)</option> */}
           </select>
         </div>
 

@@ -1830,10 +1830,20 @@ const labelValues = {
   "Sky Label": 5.49, // AU$5.49/Card
 };
 
+const ServiceAmountValues = {
+  "Basic" :  19.99,
+  "Standard" : 24.29 ,
+  "Premier" : 50.00 ,
+  "Vip" :  250.00,
+}
+
+
+
 function PaymentCard() {
   const { user } = useAuth();
   const { cardsArray, setCardsArray } = useCards(); // Use the context
-  const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
+  // const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
+  const [ServiceAmount , setServiceAmount] = useState(0); 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1845,6 +1855,8 @@ function PaymentCard() {
     certificationNumber: "",
     address: "",
     userId: user.id,
+    totalAmount: "",
+    selectedAmount: "",
   });
 
   const [responseMessage, setResponseMessage] = useState("");
@@ -1857,10 +1869,18 @@ function PaymentCard() {
     setFormData({ ...formData, [name]: value });
   };
 
+  console.log("here is the data " , formData)
+
     // Handle amount selection
-    const handleAmountChange = (e) => {
-      setSelectedAmount(e.target.value);
-    };
+    // const handleAmountChange = (e) => {
+    //   setSelectedAmount(e.target.value);
+    // };
+
+    const handleServiceAmount = (e) => {
+
+      setServiceAmount(e.target.value);
+
+    }
 
 
 
@@ -1876,6 +1896,8 @@ function PaymentCard() {
       certificationNumber: "",
       address: "",
       userId: user.id,
+      totalAmount: "",
+      selectedAmount: "",
     });
   };
 
@@ -1930,11 +1952,19 @@ const handleSubmit = async (e) => {
   }
 
   // Step 1: Calculate the total amount
-  let totalAmount = selectedAmount;
+  let totalAmount = 0;
   cardsArray.forEach((card) => {
     const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
     totalAmount += labelValue; // Add the label value to the total amount
   });
+
+  cardsArray.forEach((card) => {
+    const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
+    totalAmount += ServiceAmountValue; // Add the label value to the total amount
+  });
+
+  setServiceAmount(totalAmount)
+  
 
   // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
   localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
@@ -2176,38 +2206,30 @@ const handleSubmit = async (e) => {
 
             <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
 
-{/* Form */}
-<form onSubmit={handleSubmit}>
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 1.5,
-      width: "100%",
-      
+            <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+  <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
+  <select
+    name="selectedAmount"
+    value={formData.selectedAmount}
+    onChange={handleChange}
+    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
+    style={{
+      backgroundColor: '#1E1E1E', // Dark background for the dropdown
+      color: '#F2F2F2', // Light text color
     }}
-    
   >
-    {/* Amount Dropdown */}
-    <FormControl fullWidth sx={{ mb: 2, bgcolor: "#7D7A7A", }} 
-     disabled={!termsAgreed || cardsArray.length === 0}
-    >
-      <InputLabel id="amount-label" sx={{ color: "#ffffff", }}>Select Amount</InputLabel>
-      <Select
-        labelId="amount-label"
-        value={selectedAmount}
-        label="Select Amount"
-        onChange={handleAmountChange}
-        sx={{ color: "#ffffff", }}
-      >
-        <MenuItem value={19.99}>$Basic</MenuItem>
-        <MenuItem value={24.49}>$Standard</MenuItem>
-        <MenuItem value={50.00}>$Premier</MenuItem>
-        <MenuItem value={250.00}>$VIP</MenuItem>
-      </Select>
-    </FormControl>
-    </Box>
-    </form>
+    <option value="" disabled className="bg-black text-white">Select a label</option>
+    <option value="Basic" disabled className="bg-black text-white hover:bg-gray-800">$Basic</option>
+    <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
+    <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
+    <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
+   
+  </select>
+</div>
+
+<Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+
 
             {/* Submit Button */}
             <Button
@@ -2292,8 +2314,14 @@ const handleSubmit = async (e) => {
         )}
 
 <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
-  Total Amount: AU${(selectedAmount + cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0)).toFixed(2)}
+  Total Amount: AU$
+  {(
+    ServiceAmount +
+    cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0) +
+    cardsArray.reduce((sum, card) => sum + (ServiceAmountValues[card.selectedAmount] || 0), 0)// Adding selectedAmounts
+  ).toFixed(2)}
 </Typography>
+
       </Box>
     </Container>
   );
