@@ -2166,6 +2166,30 @@ const handleSubmit = async (e) => {
               />
             </div>
 
+            
+            <div className="w-full md:w-full flex flex-col items-start gap-2">
+  <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
+  <select
+    name="selectedAmount"
+    value={formData.selectedAmount}
+    onChange={handleChange}
+    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
+    style={{
+      backgroundColor: '#1E1E1E', // Dark background for the dropdown
+      color: '#F2F2F2', // Light text color
+    }}
+  >
+    <option value="" disabled className="bg-black text-white">Select a label</option>
+    <option value="Basic"  className="bg-black text-white hover:bg-gray-800">$Basic</option>
+    <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
+    <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
+    <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
+   
+  </select>
+</div>
+
+<Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
             {/* Terms Checkbox */}
             <div className="flex items-center">
               <Checkbox
@@ -2206,28 +2230,6 @@ const handleSubmit = async (e) => {
 
             <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
 
-            <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-  <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
-  <select
-    name="selectedAmount"
-    value={formData.selectedAmount}
-    onChange={handleChange}
-    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
-    style={{
-      backgroundColor: '#1E1E1E', // Dark background for the dropdown
-      color: '#F2F2F2', // Light text color
-    }}
-  >
-    <option value="" disabled className="bg-black text-white">Select a label</option>
-    <option value="Basic" disabled className="bg-black text-white hover:bg-gray-800">$Basic</option>
-    <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
-    <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
-    <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
-   
-  </select>
-</div>
-
-<Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
 
 
 
