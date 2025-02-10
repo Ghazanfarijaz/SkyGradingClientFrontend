@@ -93,6 +93,96 @@ function SubmitCard() {
           }}
         />
         <PaymentCard />
+
+        <Typography
+          variant="h1"
+          gutterBottom
+          sx={{
+            color: "#FFFFFF",
+            fontWeight: "bold",
+            fontSize: "40px",
+            mb: 6,
+            letterSpacing: "2px",
+            background: "linear-gradient(to right, #FFFFFF, #50A1FF)", // Gradient applied to text
+            WebkitBackgroundClip: "text", // Clip the background to text
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          Notice: Identify your submissions via Order Number
+        </Typography>
+        <Box
+          sx={{
+            position: "relative",
+            // width: "100%",
+            // width: "1100px", // Uniform width
+            width: { md: "1100px", xs: "100%" },
+            borderRadius: "8px",
+            padding: 4,
+            marginBottom: 4,
+            color: "#FFFFFF",
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "left",
+            background: "transparent",
+            letterSpacing: "5px",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderRadius: "8px",
+              padding: "2px", // Adjust thickness of gradient border
+              background: "linear-gradient(to right, #FFFFFF, #50A1FF)", // Gradient for the border
+              WebkitMask:
+                "linear-gradient(#000, #000) content-box, linear-gradient(#fff, #fff)", // Mask to apply gradient only to the border
+              WebkitMaskComposite: "destination-out",
+              maskComposite: "exclude",
+            },
+            zIndex: 1, // Ensure content inside remains above the border
+          }}
+        >
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{
+              fontWeight: "bold",
+              fontSize: "1.5rem",
+              display: "flex",
+              alignItems: "center", // Align bullet with text
+              position: "relative",
+              "&::before": {
+                content: '""', // Add content
+                display: "inline-block",
+                width: "8px", // Bullet size
+                height: "8px",
+                borderRadius: "50%", // Circle shape
+                background: "linear-gradient(to bottom, #FFFFFF, #50A1FF)", // Gradient bullet
+                marginRight: "8px", // Space between bullet and text
+              },
+              background: "linear-gradient(to right, #FFFFFF, #50A1FF)", // Gradient for text
+              WebkitBackgroundClip: "text", // Clip gradient to text
+              WebkitTextFillColor: "transparent", // Transparent text fill
+            }}
+          >
+            How do so?
+          </Typography>
+
+          <Typography
+            variant="body1"
+            gutterBottom
+            sx={{
+              background: "linear-gradient(to right, #FFFFFF, #50A1FF)", // Gradient applied to text
+              WebkitBackgroundClip: "text", // Clip the background to text
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+           To identify your submissions, please clearly display your order number on the packaging of your delivery
+           
+          </Typography>       
+        </Box>
+
         <Typography
           variant="h1"
           gutterBottom

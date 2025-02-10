@@ -1815,7 +1815,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { useAddCardMutation } from "../api/apiSlice"; // Import addCard mutation from API slice
+import { useAddCardMutation , useFetchExternalCardDataQuery} from "../api/apiSlice"; // Import addCard mutation from API slice
 import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
 import QRCode from "qrcode";
 import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
@@ -1840,11 +1840,16 @@ const ServiceAmountValues = {
 
 
 function PaymentCard() {
+
+
+const externalCardData = useFetchExternalCardDataQuery();
+
+console.log("here is the data ", externalCardData)
+
   const { user } = useAuth();
   const { cardsArray, setCardsArray } = useCards(); // Use the context
   // const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
   const [ServiceAmount , setServiceAmount] = useState(0); 
-
   const [formData, setFormData] = useState({
     name: "",
     set: "",
@@ -1870,18 +1875,6 @@ function PaymentCard() {
   };
 
   console.log("here is the data " , formData)
-
-    // Handle amount selection
-    // const handleAmountChange = (e) => {
-    //   setSelectedAmount(e.target.value);
-    // };
-
-    const handleServiceAmount = (e) => {
-
-      setServiceAmount(e.target.value);
-
-    }
-
 
 
   // Function to reset form fields

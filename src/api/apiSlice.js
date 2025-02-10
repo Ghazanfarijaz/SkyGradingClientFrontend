@@ -100,6 +100,14 @@ const apiSlice = createApi({
         method: 'POST',
         body: paymentData,
       }),
+    }),  
+
+    // New endpoint to fetch data from an open API
+    fetchExternalCardData: builder.query({
+      query: () => ({
+        url: "https://api.pokemontcg.io/v2/cards", // Full URL for the external API
+        method: "GET",
+      }),
     }),
     
   }), 
@@ -118,7 +126,12 @@ export const {
   useUpdateUserMutation,
   //========
   useCreateOrderMutation,
-  useVerifyPaymentMutation
+  useVerifyPaymentMutation,
+
+
+  useFetchExternalCardDataQuery,
+
+
 } = apiSlice;
 
 export default apiSlice;
