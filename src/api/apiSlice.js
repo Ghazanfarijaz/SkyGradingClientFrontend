@@ -103,11 +103,18 @@ const apiSlice = createApi({
     }),  
 
     // New endpoint to fetch data from an open API
+    // fetchExternalCardData: builder.query({
+    //   query: () => ({
+    //     url: "https://api.pokemontcg.io/v2/cards", // Full URL for the external API
+    //     method: "GET",
+    //   }),
+    // }),
     fetchExternalCardData: builder.query({
-      query: () => ({
-        url: "https://api.pokemontcg.io/v2/cards", // Full URL for the external API
+      query: (searchTerm) => ({
+        url: searchTerm ? `https://api.pokemontcg.io/v2/cards?q=name:${searchTerm}` : "https://api.pokemontcg.io/v2/cards", // Dynamic URL based on search term
         method: "GET",
       }),
+      transformResponse: (response) => response.data, // Extract the `data` array from the response
     }),
     
   }), 
