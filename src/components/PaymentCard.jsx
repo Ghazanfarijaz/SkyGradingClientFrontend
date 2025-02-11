@@ -1802,7 +1802,542 @@
 
 
 
-import React, { useState, useContext } from "react";
+// import React, { useState, useContext } from "react";
+// import {
+//   Box,
+//   Button,
+//   Checkbox,
+//   Container,
+//   Typography,
+//   Divider,
+//   MenuItem,
+//   Select,
+//   FormControl,
+//   InputLabel,
+// } from "@mui/material";
+// import { useAddCardMutation , useFetchExternalCardDataQuery} from "../api/apiSlice"; // Import addCard mutation from API slice
+// import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
+// import QRCode from "qrcode";
+// import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
+// import { useCards } from "../api/CardsContext"; // Import the useCards hook
+
+
+// // Load Stripe.js
+// const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
+// const labelValues = {
+//   "Standard Label": 0.0, // Free/Card
+//   "Type Match Label": 2.49, // AU$2.49/Card
+//   "Sky Label": 5.49, // AU$5.49/Card
+// };
+
+// const ServiceAmountValues = {
+//   "Basic" :  19.99,
+//   "Standard" : 24.29 ,
+//   "Premier" : 50.00 ,
+//   "Vip" :  250.00,
+// }
+
+
+
+// function PaymentCard() {
+
+// const { data: externalCardData, isLoading, isError } = useFetchExternalCardDataQuery();
+
+
+// // Extract only the required fields (name, set.name, number)
+// const simplifiedCardData = externalCardData?.data?.map(card => ({
+//   name: card.name,
+//   setName: card.set.name,
+//   releaseDate: card.set.releaseDate,
+//   number: card.number
+// })) || [];
+
+// console.log("Simplified Card Data:", simplifiedCardData);
+
+//   const { user } = useAuth();
+//   const { cardsArray, setCardsArray } = useCards(); // Use the context
+//   // const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
+//   const [ServiceAmount , setServiceAmount] = useState(0); 
+//   const [formData, setFormData] = useState({
+//     name: "",
+//     set: "",
+//     releaseYear: "",
+//     cardNumber: "",
+//     language: "",
+//     label: "",
+//     certificationNumber: "",
+//     address: "",
+//     userId: user.id,
+//     totalAmount: "",
+//     selectedAmount: "",
+//   });
+
+//   const [responseMessage, setResponseMessage] = useState("");
+//   const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
+//   const [termsAgreed, setTermsAgreed] = useState(false); // State for terms agreement
+
+//   // Handle input changes
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setFormData({ ...formData, [name]: value });
+//   };
+
+//   console.log("here is the data " , formData)
+
+
+//   // Function to reset form fields
+//   const resetForm = () => {
+//     setFormData({
+//       name: "",
+//       set: "",
+//       releaseYear: "",
+//       cardNumber: "",
+//       language: "",
+//       label: "",
+//       certificationNumber: "",
+//       address: "",
+//       userId: user.id,
+//       totalAmount: "",
+//       selectedAmount: "",
+//     });
+//   };
+
+//   // Generate QR code and add card to cardsArray
+//   const addmore = async (e) => {
+//     e.preventDefault();
+
+//     const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
+
+//     // Basic validation
+//     if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
+//       setResponseMessage("All fields are required!");
+//       return;
+//     }
+
+//     // Generate QR code for the card
+//     const qrCodeUrl = await generateQRCode(cardNumber);
+
+//     // Add the current form data and QR code to the cardsArray
+//     const newCard = { ...formData, qrCodeUrl };
+//     setCardsArray([...cardsArray, newCard]);
+//     setResponseMessage("Card added to list!");
+
+//     // Clear the form fields
+//     resetForm();
+//   };
+
+//   // Generate QR code
+//   const generateQRCode = async (cardNumber) => {
+//     try {
+//       const url = await QRCode.toDataURL(cardNumber, { errorCorrectionLevel: 'H' });
+//       return url;
+//     } catch (err) {
+//       console.error("Error generating QR Code:", err);
+//       return "";
+//     }
+//   };
+
+//   // Handle form submission with API integration
+// // Inside the handleSubmit function
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   if (!termsAgreed) {
+//     setResponseMessage("You must agree to the terms and conditions.");
+//     return;
+//   }
+
+//   if (cardsArray.length === 0) {
+//     setResponseMessage("No cards added to submit.");
+//     return;
+//   }
+
+//   // Step 1: Calculate the total amount
+//   let totalAmount = 0;
+//   cardsArray.forEach((card) => {
+//     const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
+//     totalAmount += labelValue; // Add the label value to the total amount
+//   });
+
+//   cardsArray.forEach((card) => {
+//     const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
+//     totalAmount += ServiceAmountValue; // Add the label value to the total amount
+//   });
+
+//   setServiceAmount(totalAmount)
+  
+
+//   // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
+//   localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
+
+//   // Step 3: Call your backend to create a Checkout Session
+//   try {
+//     const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({
+//         amount: totalAmount , // Convert to cents (Stripe expects amounts in cents)
+//         currency: 'usd',
+//         successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
+//         cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
+//       }),
+//     });
+
+//     const { id: sessionId } = await response.json();
+
+//     // Step 4: Redirect to Stripe Checkout
+//     const stripe = await stripePromise;
+//     const { error } = await stripe.redirectToCheckout({ sessionId });
+
+//     if (error) {
+//       setResponseMessage(error.message);
+//     }
+//   } catch (error) {
+//     setResponseMessage(`Error: ${error.message}`);
+//   }
+// };
+//   // Download QR code
+//   const downloadQRCode = (qrCodeUrl, cardNumber) => {
+//     const a = document.createElement("a");
+//     a.href = qrCodeUrl;
+//     a.download = `${cardNumber}_qr.png`;
+//     a.click();
+//   };
+
+//   // Check if data is loading or if there's an error
+// if (isLoading) return <div>Loading...</div>;
+// if (isError) return <div>Error fetching data</div>;
+
+//   return (
+//     <Container
+//       maxWidth="lg"
+//       sx={{
+//         minHeight: "100vh",
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//         zIndex: 1,
+//         paddingLeft: { xs: 0, md: "32px" },
+//         paddingRight: { xs: 0, md: "32px" },
+//       }}
+//     >
+//       <Box
+//         sx={{
+//           width: "100%",
+//           padding: 4,
+//           borderRadius: 3,
+//           margin: "0 auto",
+//         }}
+//       >
+//         {/* Title */}
+//         <Typography
+//           variant="h1"
+//           align="center"
+//           gutterBottom
+//           sx={{
+//             color: "#FFFFFF",
+//             fontWeight: "bold",
+//             fontSize: "35px",
+//             mb: 1.5,
+//             letterSpacing: "3px",
+//           }}
+//         >
+//           Submit Your Card Details For Grading
+//         </Typography>
+
+//         <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+//         {/* Form */}
+//         <form onSubmit={handleSubmit}>
+//           <Box
+//             sx={{
+//               display: "flex",
+//               flexDirection: "column",
+//               gap: 1.5,
+//               width: "100%",
+//             }}
+//           >
+//             {/* Name and Set */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Card Name</label>
+//                 <input
+//                   type="text"
+//                   name="name"
+//                   placeholder="Enter Card name"
+//                   value={formData.name}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Set</label>
+//                 <input
+//                   type="text"
+//                   name="set"
+//                   placeholder="Enter your Set"
+//                   value={formData.set}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Release Year and Card Number */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">
+//                   Release Year
+//                 </label>
+//                 <input
+//                   type="text"
+//                   name="releaseYear"
+//                   placeholder="Enter your Release Year"
+//                   value={formData.releaseYear}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Card Number</label>
+//                 <input
+//                   type="text"
+//                   name="cardNumber"
+//                   placeholder="Enter your Card Number"
+//                   value={formData.cardNumber}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Language and Label */}
+//             <div className="w-full flex flex-col md:flex-row gap-5">
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//                 <label className="text-[#F2F2F2] opacity-70">Language</label>
+//                 <input
+//                   type="text"
+//                   name="language"
+//                   placeholder="Enter your Language"
+//                   value={formData.language}
+//                   onChange={handleChange}
+//                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//                 />
+//               </div>
+//               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
+//   <label className="text-[#F2F2F2] opacity-70">Label</label>
+//   <select
+//     name="label"
+//     value={formData.label}
+//     onChange={handleChange}
+//     className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
+//     style={{
+//       backgroundColor: '#1E1E1E', // Dark background for the dropdown
+//       color: '#F2F2F2', // Light text color
+//     }}
+//   >
+//     <option value="" disabled className="bg-black text-white">Select a label</option>
+//     <option value="Standard Label" className="bg-black text-white hover:bg-gray-800">Standard Label</option>
+//     <option value="Type Match Label" className="bg-black text-white hover:bg-gray-800">Type Match Label</option>
+//     <option value="Sky Label" className="bg-black text-white hover:bg-gray-800">Sky Label</option>
+//   </select>
+// </div>
+//             </div>
+
+//             {/* Certification Number */}
+//             <div className="w-full flex flex-col items-start gap-2">
+//               <label className="text-[#F2F2F2] opacity-70">
+//                 Certification Number
+//               </label>
+//               <input
+//                 type="text"
+//                 name="certificationNumber"
+//                 placeholder="Enter your Certification Number"
+//                 value={formData.certificationNumber}
+//                 onChange={handleChange}
+//                 className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//               />
+//             </div>
+
+//             {/* Address */}
+//             <div className="w-full flex flex-col items-start gap-2">
+//               <label className="text-[#F2F2F2] opacity-70">Address</label>
+//               <textarea
+//                 name="address"
+//                 placeholder="Enter your complete address for receiving the Card"
+//                 value={formData.address}
+//                 onChange={handleChange}
+//                 className="bg-transparent text-white w-full h-[150px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+//               />
+//             </div>
+
+            
+//             <div className="w-full md:w-full flex flex-col items-start gap-2">
+//   <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
+//   <select
+//     name="selectedAmount"
+//     value={formData.selectedAmount}
+//     onChange={handleChange}
+//     className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
+//     style={{
+//       backgroundColor: '#1E1E1E', // Dark background for the dropdown
+//       color: '#F2F2F2', // Light text color
+//     }}
+//   >
+//     <option value="" disabled className="bg-black text-white">Select a label</option>
+//     <option value="Basic"  className="bg-black text-white hover:bg-gray-800">$Basic</option>
+//     <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
+//     <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
+//     <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
+   
+//   </select>
+// </div>
+
+// <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+//             {/* Terms Checkbox */}
+//             <div className="flex items-center">
+//               <Checkbox
+//                 size="medium"
+//                 checked={termsAgreed}
+//                 onChange={(e) => setTermsAgreed(e.target.checked)}
+//                 sx={{
+//                   borderRadius: 3,
+//                   color: "#50A1FF",
+//                   "&.Mui-checked": {
+//                     color: "#50A1FF",
+//                   },
+//                 }}
+//               />
+//               <p className="text-[#F2F2F2] opacity-70">
+//                 By clicking, you agree with our Terms & Conditions
+//               </p>
+//             </div>
+
+//             {/* Add More Button */}
+//             <Button
+//               fullWidth
+//               variant="contained"
+//               sx={{
+//                 bgcolor: "#50A1FF",
+//                 color: "Black",
+//                 textTransform: "none",
+//                 padding: "10px 0",
+//                 fontSize: "20px",
+//                 fontWeight: "bold",
+//                 "&:hover": { bgcolor: "#0277BD" },
+//                 borderRadius: 3,
+//               }}
+//               onClick={addmore}
+//             >
+//               Add More
+//             </Button>
+
+//             <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
+
+
+
+//             {/* Submit Button */}
+//             <Button
+//               fullWidth
+//               type="submit"
+//               variant="contained"
+//               sx={{
+//                 bgcolor: "#50A1FF",
+//                 color: "Black",
+//                 textTransform: "none",
+//                 padding: "10px 0",
+//                 fontSize: "20px",
+//                 fontWeight: "bold",
+//                 "&:hover": { bgcolor: "#0277BD" },
+//                 borderRadius: 3,
+//               }}
+//               disabled={!termsAgreed || cardsArray.length === 0}
+//             >
+//               Pay Now
+//             </Button>
+//           </Box>
+//         </form>
+
+//         {/* Response Message */}
+//         {responseMessage && (
+//           <Typography
+//             align="center"
+//             sx={{
+//               mt: 2,
+//               color: responseMessage.includes("successfully")
+//                 ? "#4CAF50"
+//                 : "#FF5252",
+//               fontSize: "16px",
+//               fontWeight: "bold",
+//             }}
+//           >
+//             {responseMessage}
+//           </Typography>
+//         )}
+
+//         {/* Display QR Codes for All Cards */}
+//         {cardsArray.length > 0 && (
+//           <Box sx={{ mt: 4 }}>
+//             <Typography variant="h6" align="center" color="white" gutterBottom>
+//               Generated QR Codes:
+//             </Typography>
+//             <Box
+//               sx={{
+//                 display: "flex",
+//                 flexWrap: "wrap",
+//                 gap: 2,
+//                 justifyContent: "center",
+//               }}
+//             >
+//               {cardsArray.map((card, index) => (
+//                 <Box
+//                   key={index}
+//                   sx={{
+//                     textAlign: "center",
+//                     border: "1px solid #ccc",
+//                     borderRadius: 2,
+//                     padding: 2,
+//                   }}
+//                 >
+//                   <Typography color="white">{card.name}</Typography>
+//                   <img
+//                     src={card.qrCodeUrl}
+//                     alt={`QR Code for ${card.cardNumber}`}
+//                     style={{ width: "150px", height: "150px", margin: "10px auto" }}
+//                   />
+//                   <Button
+//                     variant="outlined"
+//                     color="primary"
+//                     onClick={() => downloadQRCode(card.qrCodeUrl, card.cardNumber)}
+//                   >
+//                     Download QR Code
+//                   </Button>
+//                 </Box>
+//               ))}
+//             </Box>
+//           </Box>
+//         )}
+
+// <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
+//   Total Amount: AU$
+//   {(
+//     ServiceAmount +
+//     cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0) +
+//     cardsArray.reduce((sum, card) => sum + (ServiceAmountValues[card.selectedAmount] || 0), 0)// Adding selectedAmounts
+//   ).toFixed(2)}
+// </Typography>
+
+//       </Box>
+//     </Container>
+//   );
+// }
+
+// export default PaymentCard;
+
+
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -1810,46 +2345,34 @@ import {
   Container,
   Typography,
   Divider,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
-import { useAddCardMutation , useFetchExternalCardDataQuery} from "../api/apiSlice"; // Import addCard mutation from API slice
-import { useAuth } from "../authentication/authProvider"; // Import useAuth hook
+import { useAddCardMutation, useFetchExternalCardDataQuery } from "../api/apiSlice";
+import { useAuth } from "../authentication/authProvider";
 import QRCode from "qrcode";
-import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
-import { useCards } from "../api/CardsContext"; // Import the useCards hook
-
+import { loadStripe } from "@stripe/stripe-js";
+import { useCards } from "../api/CardsContext";
 
 // Load Stripe.js
-const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
+const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6");
+
 const labelValues = {
-  "Standard Label": 0.0, // Free/Card
-  "Type Match Label": 2.49, // AU$2.49/Card
-  "Sky Label": 5.49, // AU$5.49/Card
+  "Standard Label": 0.0,
+  "Type Match Label": 2.49,
+  "Sky Label": 5.49,
 };
 
 const ServiceAmountValues = {
-  "Basic" :  19.99,
-  "Standard" : 24.29 ,
-  "Premier" : 50.00 ,
-  "Vip" :  250.00,
-}
-
-
+  "Basic": 19.99,
+  "Standard": 24.29,
+  "Premier": 50.0,
+  "Vip": 250.0,
+};
 
 function PaymentCard() {
-
-
-const externalCardData = useFetchExternalCardDataQuery();
-
-console.log("here is the data ", externalCardData)
-
+  const { data: externalCardData, isLoading, isError } = useFetchExternalCardDataQuery();
   const { user } = useAuth();
-  const { cardsArray, setCardsArray } = useCards(); // Use the context
-  // const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
-  const [ServiceAmount , setServiceAmount] = useState(0); 
+  const { cardsArray, setCardsArray } = useCards();
+  const [ServiceAmount, setServiceAmount] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     set: "",
@@ -1863,19 +2386,80 @@ console.log("here is the data ", externalCardData)
     totalAmount: "",
     selectedAmount: "",
   });
-
   const [responseMessage, setResponseMessage] = useState("");
-  const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
-  const [termsAgreed, setTermsAgreed] = useState(false); // State for terms agreement
+  const [addCard] = useAddCardMutation();
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [suggestions, setSuggestions] = useState([]); // State for card name suggestions
+
+  // Extract only the required fields (name, set.name, releaseDate, number)
+  const simplifiedCardData = externalCardData?.data?.map((card) => ({
+    name: card.name,
+    setName: card.set.name,
+    releaseDate: card.set.releaseDate,
+    number: card.number,
+  })) || [];
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Show suggestions for the "name" field
+    if (name === "name") {
+      const filteredSuggestions = simplifiedCardData.filter((card) =>
+        card.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+    }
   };
 
-  console.log("here is the data " , formData)
+  // Handle card selection from suggestions
+  const handleCardSelect = (card) => {
+    setFormData({
+      ...formData,
+      name: card.name,
+      set: card.setName,
+      releaseYear: card.releaseDate.split("/")[0], // Extract year from releaseDate
+      certificationNumber: card.number,
+    });
+    setSuggestions([]); // Clear suggestions after selection
+  };
 
+  // Render suggestions dropdown
+  const renderSuggestions = () => {
+    if (suggestions.length === 0 || formData.name === "") return null;
+
+    return (
+      <ul
+        style={{
+          position: "absolute",
+          zIndex: 1000,
+          backgroundColor: "#1E1E1E",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          maxHeight: "200px",
+          overflowY: "auto",
+          width: "100%",
+          marginTop: "4px",
+        }}
+      >
+        {suggestions.map((card, index) => (
+          <li
+            key={index}
+            style={{
+              padding: "8px",
+              cursor: "pointer",
+              color: "#F2F2F2",
+              borderBottom: "1px solid #ccc",
+            }}
+            onClick={() => handleCardSelect(card)}
+          >
+            {card.name}
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   // Function to reset form fields
   const resetForm = () => {
@@ -1930,64 +2514,63 @@ console.log("here is the data ", externalCardData)
   };
 
   // Handle form submission with API integration
-// Inside the handleSubmit function
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!termsAgreed) {
-    setResponseMessage("You must agree to the terms and conditions.");
-    return;
-  }
+    if (!termsAgreed) {
+      setResponseMessage("You must agree to the terms and conditions.");
+      return;
+    }
 
-  if (cardsArray.length === 0) {
-    setResponseMessage("No cards added to submit.");
-    return;
-  }
+    if (cardsArray.length === 0) {
+      setResponseMessage("No cards added to submit.");
+      return;
+    }
 
-  // Step 1: Calculate the total amount
-  let totalAmount = 0;
-  cardsArray.forEach((card) => {
-    const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
-    totalAmount += labelValue; // Add the label value to the total amount
-  });
-
-  cardsArray.forEach((card) => {
-    const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
-    totalAmount += ServiceAmountValue; // Add the label value to the total amount
-  });
-
-  setServiceAmount(totalAmount)
-  
-
-  // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
-  localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
-
-  // Step 3: Call your backend to create a Checkout Session
-  try {
-    const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: totalAmount , // Convert to cents (Stripe expects amounts in cents)
-        currency: 'usd',
-        successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
-        cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
-      }),
+    // Step 1: Calculate the total amount
+    let totalAmount = 0;
+    cardsArray.forEach((card) => {
+      const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
+      totalAmount += labelValue; // Add the label value to the total amount
     });
 
-    const { id: sessionId } = await response.json();
+    cardsArray.forEach((card) => {
+      const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
+      totalAmount += ServiceAmountValue; // Add the label value to the total amount
+    });
 
-    // Step 4: Redirect to Stripe Checkout
-    const stripe = await stripePromise;
-    const { error } = await stripe.redirectToCheckout({ sessionId });
+    setServiceAmount(totalAmount);
 
-    if (error) {
-      setResponseMessage(error.message);
+    // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
+    localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
+
+    // Step 3: Call your backend to create a Checkout Session
+    try {
+      const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount:  Math.round(totalAmount + 15), // Convert to cents (Stripe expects amounts in cents)
+          currency: 'aud',
+          successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
+          cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
+        }),
+      });
+
+      const { id: sessionId } = await response.json();
+
+      // Step 4: Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+
+      if (error) {
+        setResponseMessage(error.message);
+      }
+    } catch (error) {
+      setResponseMessage(`Error: ${error.message}`);
     }
-  } catch (error) {
-    setResponseMessage(`Error: ${error.message}`);
-  }
-};
+  };
+
   // Download QR code
   const downloadQRCode = (qrCodeUrl, cardNumber) => {
     const a = document.createElement("a");
@@ -1995,6 +2578,10 @@ const handleSubmit = async (e) => {
     a.download = `${cardNumber}_qr.png`;
     a.click();
   };
+
+  // Check if data is loading or if there's an error
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching data</div>;
 
   return (
     <Container
@@ -2049,14 +2636,17 @@ const handleSubmit = async (e) => {
             <div className="w-full flex flex-col md:flex-row gap-5">
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
                 <label className="text-[#F2F2F2] opacity-70">Card Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Card name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
-                />
+                <div style={{ position: "relative", width: "100%" }}>
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter Card name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
+                  />
+                  {renderSuggestions()}
+                </div>
               </div>
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
                 <label className="text-[#F2F2F2] opacity-70">Set</label>
@@ -2074,9 +2664,7 @@ const handleSubmit = async (e) => {
             {/* Release Year and Card Number */}
             <div className="w-full flex flex-col md:flex-row gap-5">
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">
-                  Release Year
-                </label>
+                <label className="text-[#F2F2F2] opacity-70">Release Year</label>
                 <input
                   type="text"
                   name="releaseYear"
@@ -2113,30 +2701,28 @@ const handleSubmit = async (e) => {
                 />
               </div>
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-  <label className="text-[#F2F2F2] opacity-70">Label</label>
-  <select
-    name="label"
-    value={formData.label}
-    onChange={handleChange}
-    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
-    style={{
-      backgroundColor: '#1E1E1E', // Dark background for the dropdown
-      color: '#F2F2F2', // Light text color
-    }}
-  >
-    <option value="" disabled className="bg-black text-white">Select a label</option>
-    <option value="Standard Label" className="bg-black text-white hover:bg-gray-800">Standard Label</option>
-    <option value="Type Match Label" className="bg-black text-white hover:bg-gray-800">Type Match Label</option>
-    <option value="Sky Label" className="bg-black text-white hover:bg-gray-800">Sky Label</option>
-  </select>
-</div>
+                <label className="text-[#F2F2F2] opacity-70">Label</label>
+                <select
+                  name="label"
+                  value={formData.label}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
+                  style={{
+                    backgroundColor: '#1E1E1E',
+                    color: '#F2F2F2',
+                  }}
+                >
+                  <option value="" disabled className="bg-black text-white">Select a label</option>
+                  <option value="Standard Label" className="bg-black text-white hover:bg-gray-800">Standard Label</option>
+                  <option value="Type Match Label" className="bg-black text-white hover:bg-gray-800">Type Match Label</option>
+                  <option value="Sky Label" className="bg-black text-white hover:bg-gray-800">Sky Label</option>
+                </select>
+              </div>
             </div>
 
             {/* Certification Number */}
             <div className="w-full flex flex-col items-start gap-2">
-              <label className="text-[#F2F2F2] opacity-70">
-                Certification Number
-              </label>
+              <label className="text-[#F2F2F2] opacity-70">Certification Number</label>
               <input
                 type="text"
                 name="certificationNumber"
@@ -2159,29 +2745,28 @@ const handleSubmit = async (e) => {
               />
             </div>
 
-            
+            {/* Select Amount */}
             <div className="w-full md:w-full flex flex-col items-start gap-2">
-  <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
-  <select
-    name="selectedAmount"
-    value={formData.selectedAmount}
-    onChange={handleChange}
-    className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none" // Added appearance-none for custom styling
-    style={{
-      backgroundColor: '#1E1E1E', // Dark background for the dropdown
-      color: '#F2F2F2', // Light text color
-    }}
-  >
-    <option value="" disabled className="bg-black text-white">Select a label</option>
-    <option value="Basic"  className="bg-black text-white hover:bg-gray-800">$Basic</option>
-    <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
-    <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
-    <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
-   
-  </select>
-</div>
+              <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
+              <select
+                name="selectedAmount"
+                value={formData.selectedAmount}
+                onChange={handleChange}
+                className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
+                style={{
+                  backgroundColor: '#1E1E1E',
+                  color: '#F2F2F2',
+                }}
+              >
+                <option value="" disabled className="bg-black text-white">Select a label</option>
+                <option value="Basic" className="bg-black text-white hover:bg-gray-800">$Basic</option>
+                <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
+                <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
+                <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
+              </select>
+            </div>
 
-<Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+            <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
 
             {/* Terms Checkbox */}
             <div className="flex items-center">
@@ -2222,9 +2807,6 @@ const handleSubmit = async (e) => {
             </Button>
 
             <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
-
-
-
 
             {/* Submit Button */}
             <Button
@@ -2308,15 +2890,15 @@ const handleSubmit = async (e) => {
           </Box>
         )}
 
-<Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
-  Total Amount: AU$
-  {(
-    ServiceAmount +
-    cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0) +
-    cardsArray.reduce((sum, card) => sum + (ServiceAmountValues[card.selectedAmount] || 0), 0)// Adding selectedAmounts
-  ).toFixed(2)}
-</Typography>
-
+        {/* Total Amount */}
+        <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
+          Total Amount: AU$
+          {(
+            ServiceAmount +
+            cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0) +
+            cardsArray.reduce((sum, card) => sum + (ServiceAmountValues[card.selectedAmount] || 0), 0)
+          ).toFixed(2)}
+        </Typography>
       </Box>
     </Container>
   );
