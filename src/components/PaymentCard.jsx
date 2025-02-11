@@ -2454,7 +2454,7 @@ function PaymentCard() {
             }}
             onClick={() => handleCardSelect(card)}
           >
-            {card.name}
+           {`${card.name} - ${card.setName} - ${card.releaseDate.split("/")[0]} `}
           </li>
         ))}
       </ul>
