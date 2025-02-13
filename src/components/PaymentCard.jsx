@@ -501,14 +501,9 @@
 
 // export default PaymentCard;
 
-
-
-
-
 ////////// Stable old version ////////////////
 
 //====================================================================
-
 
 // import React, { useState } from "react";
 // import {
@@ -530,15 +525,13 @@
 //   const { user, isAuthenticated } = useAuth();
 //   console.log(user.id);
 
-
-  
 //     // Fetch cards for the authenticated user
 //   const { data: cards = [], isLoading, error } = useGetCardByUserIdQuery(user?.id);
 
 //   // if (!isAuthenticated) {
 //   //   return <p>Please log in.</p>;
 //   // }
-  
+
 //   const [formData, setFormData] = useState({
 //     name: "",
 //     set: "",
@@ -558,8 +551,6 @@
 //     // trackingID,
 //     userId: user.id,
 //   });
-
-
 
 //   const [message, setMessage] = useState("");
 //   const [responseMessage, setResponseMessage] = useState("");
@@ -611,24 +602,22 @@
 //   //   }
 //   // };
 
-
 //   // Handle input changes
 //   const handleChange = (e) => {
 //     const { name, value } = e.target;
 //     setFormData({ ...formData, [name]: value });
 //   };
 
-
 //   const addmore = async (e)  =>{
 
-//     const { name, set, releaseYear, 
-//       cardNumber, language, label, 
-//       certificationNumber, address , 
+//     const { name, set, releaseYear,
+//       cardNumber, language, label,
+//       certificationNumber, address ,
 //       // termsAgreed, rarity, image,
-//       // grade, subgrade, trackingStatus, 
-//       // rating, trackingID , 
+//       // grade, subgrade, trackingStatus,
+//       // rating, trackingID ,
 //       // userId
-    
+
 //     } = formData;
 
 //     // Basic validation
@@ -645,7 +634,6 @@
 //       } catch (error) {
 //         setResponseMessage(`Error: ${error.message}`);
 //       }
-    
 
 //   }
 
@@ -653,14 +641,14 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
-//     const { name, set, releaseYear, 
-//       cardNumber, language, label, 
-//       certificationNumber, address , 
+//     const { name, set, releaseYear,
+//       cardNumber, language, label,
+//       certificationNumber, address ,
 //       // termsAgreed, rarity, image,
-//       // grade, subgrade, trackingStatus, 
-//       // rating, trackingID , 
+//       // grade, subgrade, trackingStatus,
+//       // rating, trackingID ,
 //       // userId
-    
+
 //     } = formData;
 
 //     // Basic validation
@@ -668,7 +656,7 @@
 //       setResponseMessage("All fields are required!");
 //       return;
 //     }
-   
+
 //     // Call addCard mutation with form data
 //     try {
 //       await addCard(formData);
@@ -678,8 +666,6 @@
 //       setResponseMessage(`Error: ${error.message}`);
 //     }
 //   };
-
-  
 
 //   const [cardNumber, setCardNumber] = useState(""); // To store the card number
 //   const [qrCodeUrl, setQrCodeUrl] = useState(""); // To store the generated QR code URL
@@ -954,13 +940,7 @@
 
 //==========================================================
 
-
-
-
-
-
 // //////////////////// new addmore thing ///////////
-
 
 // import React, { useState } from "react";
 // import {
@@ -1359,19 +1339,6 @@
 
 // export default PaymentCard;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ////////////////////// payment good but not adding
 
 // import React, { useState } from "react";
@@ -1394,7 +1361,6 @@
 
 // function PaymentCard() {
 //   const { user } = useAuth();
-  
 
 //   const [formData, setFormData] = useState({
 //     name: "",
@@ -1800,8 +1766,6 @@
 
 // export default PaymentCard;
 
-
-
 // import React, { useState, useContext } from "react";
 // import {
 //   Box,
@@ -1821,7 +1785,6 @@
 // import { loadStripe } from "@stripe/stripe-js"; // Import loadStripe from Stripe.js
 // import { useCards } from "../api/CardsContext"; // Import the useCards hook
 
-
 // // Load Stripe.js
 // const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"); // Replace with your Stripe public key
 // const labelValues = {
@@ -1837,12 +1800,9 @@
 //   "Vip" :  250.00,
 // }
 
-
-
 // function PaymentCard() {
 
 // const { data: externalCardData, isLoading, isError } = useFetchExternalCardDataQuery();
-
 
 // // Extract only the required fields (name, set.name, number)
 // const simplifiedCardData = externalCardData?.data?.map(card => ({
@@ -1857,7 +1817,7 @@
 //   const { user } = useAuth();
 //   const { cardsArray, setCardsArray } = useCards(); // Use the context
 //   // const [selectedAmount, setSelectedAmount] = useState(50); // Default amount
-//   const [ServiceAmount , setServiceAmount] = useState(0); 
+//   const [ServiceAmount , setServiceAmount] = useState(0);
 //   const [formData, setFormData] = useState({
 //     name: "",
 //     set: "",
@@ -1883,7 +1843,6 @@
 //   };
 
 //   console.log("here is the data " , formData)
-
 
 //   // Function to reset form fields
 //   const resetForm = () => {
@@ -1965,7 +1924,6 @@
 //   });
 
 //   setServiceAmount(totalAmount)
-  
 
 //   // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
 //   localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
@@ -2171,7 +2129,6 @@
 //               />
 //             </div>
 
-            
 //             <div className="w-full md:w-full flex flex-col items-start gap-2">
 //   <label className="text-[#F2F2F2] opacity-70">Select Amount</label>
 //   <select
@@ -2189,7 +2146,7 @@
 //     <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
 //     <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
 //     <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
-   
+
 //   </select>
 // </div>
 
@@ -2234,9 +2191,6 @@
 //             </Button>
 
 //             <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
-
-
-
 
 //             {/* Submit Button */}
 //             <Button
@@ -2336,13 +2290,6 @@
 
 // export default PaymentCard;
 
-
-
-
-
-
-
-
 // import React, { useState } from "react";
 // import {
 //   Box,
@@ -2377,7 +2324,6 @@
 // function PaymentCard() {
 //   const { data: externalCardData, isLoading, isError } = useFetchExternalCardDataQuery();
 
-  
 //   const { user } = useAuth();
 //   const { cardsArray, setCardsArray } = useCards();
 //   const [ServiceAmount, setServiceAmount] = useState(0);
@@ -2915,10 +2861,6 @@
 // }
 
 // export default PaymentCard;
-
-
-
-
 
 // import React, { useState } from "react";
 // import {
@@ -3491,13 +3433,6 @@
 
 // export default PaymentCard;
 
-
-
-
-
-
-
-
 import React, { useState } from "react";
 import {
   Box,
@@ -3508,7 +3443,10 @@ import {
   Divider,
   CircularProgress,
 } from "@mui/material";
-import { useAddCardMutation, useFetchExternalCardDataQuery } from "../api/apiSlice";
+import {
+  useAddCardMutation,
+  useFetchExternalCardDataQuery,
+} from "../api/apiSlice";
 import { useAuth } from "../authentication/authProvider";
 import QRCode from "qrcode";
 import { loadStripe } from "@stripe/stripe-js";
@@ -3516,7 +3454,9 @@ import { useCards } from "../api/CardsContext";
 import ErrorIcon from "@mui/icons-material/Error"; // For error state
 
 // Load Stripe.js
-const stripePromise = loadStripe("pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6");
+const stripePromise = loadStripe(
+  "pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"
+);
 
 const labelValues = {
   "Standard Label": 0.0,
@@ -3525,15 +3465,19 @@ const labelValues = {
 };
 
 const ServiceAmountValues = {
-  "Basic": 19.99,
-  "Standard": 24.29,
-  "Premier": 50.0,
-  "Vip": 250.0,
+  Basic: 19.99,
+  Standard: 24.29,
+  Premier: 50.0,
+  Vip: 250.0,
 };
 
 function PaymentCard() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data: externalCardData, isLoading, isError } = useFetchExternalCardDataQuery(searchTerm, {
+  const {
+    data: externalCardData,
+    isLoading,
+    isError,
+  } = useFetchExternalCardDataQuery(searchTerm, {
     skip: !searchTerm, // Skip the query if searchTerm is empty
   });
 
@@ -3547,7 +3491,7 @@ function PaymentCard() {
     cardNumber: "",
     language: "",
     label: "",
-    certificationNumber: "",
+    // certificationNumber: "",
     address: "",
     userId: user.id,
     totalAmount: "",
@@ -3585,7 +3529,7 @@ function PaymentCard() {
       name: card.name,
       set: card.setName,
       releaseYear: card.releaseDate.split("/")[0], // Extract year from releaseDate
-      certificationNumber: card.number,
+      // certificationNumber: card.number,
     });
     setSuggestions([]); // Clear suggestions after selection
   };
@@ -3608,7 +3552,8 @@ function PaymentCard() {
             alignItems: "center",
           }}
         >
-          <CircularProgress size={20} sx={{ color: "#50A1FF" }} /> {/* Spinner for loading */}
+          <CircularProgress size={20} sx={{ color: "#50A1FF" }} />{" "}
+          {/* Spinner for loading */}
         </Box>
       );
     }
@@ -3663,7 +3608,9 @@ function PaymentCard() {
             }}
             onClick={() => handleCardSelect(card)}
           >
-            {`${card.name} - ${card.setName} - ${card.releaseDate.split("/")[0]} `}
+            {`${card.name} - ${card.setName} - ${
+              card.releaseDate.split("/")[0]
+            } `}
           </li>
         ))}
       </ul>
@@ -3679,7 +3626,7 @@ function PaymentCard() {
       cardNumber: "",
       language: "",
       label: "",
-      certificationNumber: "",
+      // certificationNumber: "",
       address: "",
       userId: user.id,
       totalAmount: "",
@@ -3691,10 +3638,19 @@ function PaymentCard() {
   const addmore = async (e) => {
     e.preventDefault();
 
-    const { name, set, releaseYear, cardNumber, language, label, certificationNumber, address } = formData;
+    const { name, set, releaseYear, cardNumber, language, label, address } =
+      formData;
 
     // Basic validation
-    if (!name || !set || !releaseYear || !cardNumber || !language || !label || !certificationNumber || !address) {
+    if (
+      !name ||
+      !set ||
+      !releaseYear ||
+      !cardNumber ||
+      !language ||
+      !label ||
+      !address
+    ) {
       setResponseMessage("All fields are required!");
       return;
     }
@@ -3714,7 +3670,9 @@ function PaymentCard() {
   // Generate QR code
   const generateQRCode = async (cardNumber) => {
     try {
-      const url = await QRCode.toDataURL(cardNumber, { errorCorrectionLevel: 'H' });
+      const url = await QRCode.toDataURL(cardNumber, {
+        errorCorrectionLevel: "H",
+      });
       return url;
     } catch (err) {
       console.error("Error generating QR Code:", err);
@@ -3755,16 +3713,19 @@ function PaymentCard() {
 
     // Step 3: Call your backend to create a Checkout Session
     try {
-      const response = await fetch('https://skygradingv5-production.up.railway.app/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount:  Math.round(totalAmount + 15), // Convert to cents (Stripe expects amounts in cents)
-          currency: 'aud',
-          successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
-          cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
-        }),
-      });
+      const response = await fetch(
+        "https://skygradingv5-production.up.railway.app/create-checkout-session",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: Math.round(totalAmount + 15), // Convert to cents (Stripe expects amounts in cents)
+            currency: "aud",
+            successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
+            cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
+          }),
+        }
+      );
 
       const { id: sessionId } = await response.json();
 
@@ -3809,6 +3770,32 @@ function PaymentCard() {
           margin: "0 auto",
         }}
       >
+        <Box>
+          <div className="m-5 fixed  bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-3 relative overflow-hidden border border-white/40">
+            {/* White gradient shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/50 to-white/20 opacity-0 animate-[shine_2s_infinite]"></div>
+            <h1 className="text-xl font-semibold">
+              {" "}
+              💡 Address to ship the product:{" "}
+            </h1>
+            <span className="text-lg font-semibold">
+              📍 Suite 570, SHOP 87 78 HEATHERTON ROAD ENDEAVOUR HILLS VIC 3802
+            </span>
+
+            {/* Tailwind animation */}
+            <style>
+              {`
+          @keyframes shine {
+            0% { opacity: 0; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+            100% { opacity: 0; transform: translateX(200%); }
+          }
+        `}
+            </style>
+          </div>
+        </Box>
+        <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
+
         {/* Title */}
         <Typography
           variant="h1"
@@ -3869,7 +3856,9 @@ function PaymentCard() {
             {/* Release Year and Card Number */}
             <div className="w-full flex flex-col md:flex-row gap-5">
               <div className="w-full md:w-1/2 flex flex-col items-start gap-2">
-                <label className="text-[#F2F2F2] opacity-70">Release Year</label>
+                <label className="text-[#F2F2F2] opacity-70">
+                  Release Year
+                </label>
                 <input
                   type="text"
                   name="releaseYear"
@@ -3913,20 +3902,37 @@ function PaymentCard() {
                   onChange={handleChange}
                   className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
                   style={{
-                    backgroundColor: '#1E1E1E',
-                    color: '#F2F2F2',
+                    backgroundColor: "#1E1E1E",
+                    color: "#F2F2F2",
                   }}
                 >
-                  <option value="" disabled className="bg-black text-white">Select a label</option>
-                  <option value="Standard Label" className="bg-black text-white hover:bg-gray-800">Standard Label</option>
-                  <option value="Type Match Label" className="bg-black text-white hover:bg-gray-800">Type Match Label</option>
-                  <option value="Sky Label" className="bg-black text-white hover:bg-gray-800">Sky Label</option>
+                  <option value="" disabled className="bg-black text-white">
+                    Select a label
+                  </option>
+                  <option
+                    value="Standard Label"
+                    className="bg-black text-white hover:bg-gray-800"
+                  >
+                    Standard Label
+                  </option>
+                  <option
+                    value="Type Match Label"
+                    className="bg-black text-white hover:bg-gray-800"
+                  >
+                    Type Match Label
+                  </option>
+                  <option
+                    value="Sky Label"
+                    className="bg-black text-white hover:bg-gray-800"
+                  >
+                    Sky Label
+                  </option>
                 </select>
               </div>
             </div>
 
             {/* Certification Number */}
-            <div className="w-full flex flex-col items-start gap-2">
+            {/* <div className="w-full flex flex-col items-start gap-2">
               <label className="text-[#F2F2F2] opacity-70">Certification Number</label>
               <input
                 type="text"
@@ -3936,7 +3942,7 @@ function PaymentCard() {
                 onChange={handleChange}
                 className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
               />
-            </div>
+            </div> */}
 
             {/* Address */}
             <div className="w-full flex flex-col items-start gap-2">
@@ -3959,15 +3965,37 @@ function PaymentCard() {
                 onChange={handleChange}
                 className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
                 style={{
-                  backgroundColor: '#1E1E1E',
-                  color: '#F2F2F2',
+                  backgroundColor: "#1E1E1E",
+                  color: "#F2F2F2",
                 }}
               >
-                <option value="" disabled className="bg-black text-white">Select a label</option>
-                <option value="Basic" className="bg-black text-white hover:bg-gray-800">$Basic</option>
-                <option value="Standard" className="bg-black text-white hover:bg-gray-800">$Standard</option>
-                <option value="Premier" className="bg-black text-white hover:bg-gray-800">$Premier</option>
-                <option value="Vip" className="bg-black text-white hover:bg-gray-800">$VIP</option>
+                <option value="" disabled className="bg-black text-white">
+                  Select a label
+                </option>
+                <option
+                  value="Basic"
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  $Basic
+                </option>
+                <option
+                  value="Standard"
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  $Standard
+                </option>
+                <option
+                  value="Premier"
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  $Premier
+                </option>
+                <option
+                  value="Vip"
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  $VIP
+                </option>
               </select>
             </div>
 
@@ -4080,12 +4108,18 @@ function PaymentCard() {
                   <img
                     src={card.qrCodeUrl}
                     alt={`QR Code for ${card.cardNumber}`}
-                    style={{ width: "150px", height: "150px", margin: "10px auto" }}
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      margin: "10px auto",
+                    }}
                   />
                   <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => downloadQRCode(card.qrCodeUrl, card.cardNumber)}
+                    onClick={() =>
+                      downloadQRCode(card.qrCodeUrl, card.cardNumber)
+                    }
                   >
                     Download QR Code
                   </Button>
@@ -4100,8 +4134,15 @@ function PaymentCard() {
           Total Amount: AU$
           {(
             ServiceAmount +
-            cardsArray.reduce((sum, card) => sum + (labelValues[card.label] || 0), 0) +
-            cardsArray.reduce((sum, card) => sum + (ServiceAmountValues[card.selectedAmount] || 0), 0)
+            cardsArray.reduce(
+              (sum, card) => sum + (labelValues[card.label] || 0),
+              0
+            ) +
+            cardsArray.reduce(
+              (sum, card) =>
+                sum + (ServiceAmountValues[card.selectedAmount] || 0),
+              0
+            )
           ).toFixed(2)}
         </Typography>
       </Box>
