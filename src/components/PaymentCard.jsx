@@ -3455,7 +3455,7 @@ import ErrorIcon from "@mui/icons-material/Error"; // For error state
 
 // Load Stripe.js
 const stripePromise = loadStripe(
-  "pk_test_51NHlsEHIiSEGZ6oKwSwK0F9zyZ5CDZcXsyLIhuvhB0E9Tbhp3YAAtZRt5rqAsOGFnFGZAFcqQAeSP8qXURUH1Uts00F2Q9fsl6"
+  "pk_test_51QgGhKECWsPXMdmNJuNo9RsD1y860dqq5Yf0CIbasPrGwRmdzKe3pjbHMZohqCLbeSxZTzl0x0Aol1WZAYqNNUts00vlBMrbVD"
 );
 
 const labelValues = {
@@ -3491,6 +3491,7 @@ function PaymentCard() {
     cardNumber: "",
     language: "",
     label: "",
+    holographic: true,
     // certificationNumber: "",
     address: "",
     userId: user.id,
@@ -3626,6 +3627,7 @@ function PaymentCard() {
       cardNumber: "",
       language: "",
       label: "",
+      holographic: "",
       // certificationNumber: "",
       address: "",
       userId: user.id,
@@ -3929,6 +3931,37 @@ function PaymentCard() {
                   </option>
                 </select>
               </div>
+            </div>
+
+              {/* Holographic */}
+            <div className="w-full flex flex-col items-start gap-2">
+              <label className="text-[#F2F2F2] opacity-70">Holographic</label>
+              <select
+                  name="holographic"
+                  value={formData.holographic}
+                  onChange={handleChange}
+                  className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
+                  style={{
+                    backgroundColor: "#1E1E1E",
+                    color: "#F2F2F2",
+                  }}
+                >
+                  <option value="" disabled className="bg-black text-white">
+                    Select a Holographic or Recerse Holographic
+                  </option>
+                  <option
+                    value= {true}
+                    className="bg-black text-white hover:bg-gray-800"
+                  >
+                    Holographic
+                  </option>
+                  <option
+                    value= {false}
+                    className="bg-black text-white hover:bg-gray-800"
+                  >
+                    Recerse Holographic
+                  </option>                
+                </select>
             </div>
 
             {/* Certification Number */}
