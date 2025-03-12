@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 import polygon from "../assets/Polygon.png";
 import group from "../assets/Group.png";
@@ -104,16 +105,21 @@ function Hero() {
           </Typography>
 
           {/* Discover More */}
+      
           <Typography
+          component={Link}
+           to="/submit"
             sx={{
               fontWeight: "bold",
               fontSize: { md: "16px", xs: "12px" },
               color: "#F27013", // Orange color
               cursor: "pointer",
             }}
+          
           >
             Discover More
           </Typography>
+      
         </Box>
       </Box>
 
