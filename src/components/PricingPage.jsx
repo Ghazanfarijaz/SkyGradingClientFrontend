@@ -80,11 +80,12 @@ const PricingPage = () => {
       turnaround: "20 Business days",
       insurance: "AU$ 200",
       features: {
+        "Feature": "",
         "User Dashboard": true,
         "Real Time Tracking": true,
-        "Custom Label Options": false,
-        "Advanced Analytics": false,
-        "Priority Support": false
+        "Custom Label Options": true,
+        "Advanced Analytics": true,
+        "Priority Support": true
       }
     },
     {
@@ -96,8 +97,8 @@ const PricingPage = () => {
         "User Dashboard": true,
         "Real Time Tracking": true,
         "Custom Label Options": true,
-        "Advanced Analytics": false,
-        "Priority Support": false
+        "Advanced Analytics": true,
+        "Priority Support": true
       }
     },
     {
@@ -110,7 +111,7 @@ const PricingPage = () => {
         "Real Time Tracking": true,
         "Custom Label Options": true,
         "Advanced Analytics": true,
-        "Priority Support": false
+        "Priority Support": true
       }
     },
     {
@@ -251,7 +252,8 @@ const PricingPage = () => {
       <td className="px-6 py-4">{featureName}</td>
       {serviceTiers.map((tier, index) => (
         <td key={index} className="px-6 py-4">
-          {tier.features[featureName] ? <FaCheck className="text-[#D4AF37]" /> : <FaTimes className="text-red-500" />}
+          {tier.features[featureName] ? <FaCheck className="text-[#009900]" /> : <hr className="border-t-2 border-gray-300 my-4" />
+          }
         </td>
       ))}
     </tr>
