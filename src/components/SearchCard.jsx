@@ -14,6 +14,7 @@ import triangle from "../assets/triangle.png";
 
 import polygon from "../assets/Polygon.png";
 import group from "../assets/Group.png";
+import { Link } from "react-router-dom";
 
 export default function SearchCard() {
   const swiperRef = useRef(null);
@@ -272,12 +273,15 @@ const handleScanSuccess = (decodedText) => {
 
           {/* Discover More */}
           <Typography
+          component={Link}
+           to="/submit"
             sx={{
               fontWeight: "bold",
               fontSize: { md: "16px", xs: "12px" },
               color: "#F27013", // Orange color
               cursor: "pointer",
             }}
+          
           >
             Discover More
           </Typography>
