@@ -3455,7 +3455,8 @@ import ErrorIcon from "@mui/icons-material/Error"; // For error state
 
 // Load Stripe.js
 const stripePromise = loadStripe(
-  "pk_test_51QgGhKECWsPXMdmNJuNo9RsD1y860dqq5Yf0CIbasPrGwRmdzKe3pjbHMZohqCLbeSxZTzl0x0Aol1WZAYqNNUts00vlBMrbVD"
+  // "pk_test_51QgGhKECWsPXMdmNJuNo9RsD1y860dqq5Yf0CIbasPrGwRmdzKe3pjbHMZohqCLbeSxZTzl0x0Aol1WZAYqNNUts00vlBMrbVD"
+  "pk_live_51QgGhKECWsPXMdmNYjnl3FA2gajYcqeMUobQ8WJBEwdrzLpAZpF7vYXaXvIvf0CEcxgPLHy9ju0m0OyF4yFHwubC00NKNfgVGo"
 );
 
 const labelValues = {
