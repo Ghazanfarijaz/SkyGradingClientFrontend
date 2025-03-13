@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const PricingPage = () => {
   const [isYearly, setIsYearly] = useState(false);
-  const [currency, setCurrency] = useState("GBP");
+  const [currency, setCurrency] = useState("AUD");
   const [activeTab, setActiveTab] = useState("grading");
 
   // const currencySymbol = currency === "GBP" ? "£" : "AU$";
@@ -40,37 +40,93 @@ const PricingPage = () => {
     }
   ];
 
+  // const serviceTiers = [
+  //   {
+  //     name: "Basic",
+  //     price: 19.99,
+  //     turnaround: "20 Buisness days",
+  //     insurance: "AU$ 200",
+  //     features: [true, true, false, false, false]
+  //   },
+  //   {
+  //     name: "Standard",
+  //     price: 24.49,
+  //     turnaround: "10 Buisness days",
+  //     insurance: "AU$ 400",
+  //     features: [true, true, true, false, false]
+  //   },
+  //   {
+  //     name: "Premier",
+  //     price: 50,
+  //     turnaround: "5 Buisness days",
+  //     insurance: "AU$ 1000",
+  //     features: [true, true, true, true, false]
+  //   },
+  //   {
+  //     name: "VIP",
+  //     price: 250,
+  //     turnaround: "5 Buisness days",
+  //     insurance: "AU$ 5000",
+  //     features: [true, true, true, true, true]
+  //   }
+  // ];
+
+
+
   const serviceTiers = [
     {
       name: "Basic",
       price: 19.99,
-      turnaround: "20 Buisness days",
+      turnaround: "20 Business days",
       insurance: "AU$ 200",
-      features: [true, true, false, false, false]
+      features: {
+        "User Dashboard": true,
+        "Real Time Tracking": true,
+        "Custom Label Options": false,
+        "Advanced Analytics": false,
+        "Priority Support": false
+      }
     },
     {
       name: "Standard",
       price: 24.49,
-      turnaround: "10 Buisness days",
+      turnaround: "10 Business days",
       insurance: "AU$ 400",
-      features: [true, true, true, false, false]
+      features: {
+        "User Dashboard": true,
+        "Real Time Tracking": true,
+        "Custom Label Options": true,
+        "Advanced Analytics": false,
+        "Priority Support": false
+      }
     },
     {
       name: "Premier",
       price: 50,
-      turnaround: "5 Buisness days",
+      turnaround: "5 Business days",
       insurance: "AU$ 1000",
-      features: [true, true, true, true, false]
+      features: {
+        "User Dashboard": true,
+        "Real Time Tracking": true,
+        "Custom Label Options": true,
+        "Advanced Analytics": true,
+        "Priority Support": false
+      }
     },
     {
       name: "VIP",
       price: 250,
-      turnaround: "5 Buisness days",
+      turnaround: "5 Business days",
       insurance: "AU$ 5000",
-      features: [true, true, true, true, true]
+      features: {
+        "User Dashboard": true,
+        "Real Time Tracking": true,
+        "Custom Label Options": true,
+        "Advanced Analytics": true,
+        "Priority Support": true
+      }
     }
   ];
-
   return (
     <div className="min-h-screen bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -131,6 +187,7 @@ const PricingPage = () => {
             </motion.div>
           ))}
         </div>
+
         <div className="text-center mb-10 mt-5">
         <h1 className="text-4xl md:text-5xl font-bold mb-8">Service Pricing</h1>
         </div>
@@ -166,52 +223,40 @@ const PricingPage = () => {
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td className="px-6 py-4">Price per Card</td>
-        {serviceTiers.map((tier, index) => (
-          <td key={index} className="px-6 py-4">
-            {currencySymbol}
-            {isYearly
-              ? (tier.price * yearlyDiscount).toFixed(2)
-              : tier.price.toFixed(2)}
-          </td>
-        ))}
-      </tr>
-      <tr>
-        <td className="px-6 py-4">Turnaround Time</td>
-        {serviceTiers.map((tier, index) => (
-          <td key={index} className="px-6 py-4">{tier.turnaround}</td>
-        ))}
-      </tr>
-      <tr>
-        <td className="px-6 py-4">Insurance</td>
-        {serviceTiers.map((tier, index) => (
-          <td key={index} className="px-6 py-4">{tier.insurance}</td>
-        ))}
-      </tr>
-      <tr>
-        <td className="px-6 py-4">Features</td>
-        {serviceTiers.map((tier, index) => (
-          <td key={index} className="px-6 py-4">
-            {tier.features.map((feature, i) => (
-              <span key={i} className="block">
-                {feature ? <FaCheck className="text-[#D4AF37]" /> : <FaTimes className="text-red-500" />}
-              </span>
-            ))}
-          </td>
-        ))}
-      </tr>
-      <tr>
-        {/* <td className="px-6 py-4">Action</td>
-        {serviceTiers.map((tier, index) => (
-          <td key={index} className="px-6 py-4">
-            <button className="bg-[#D4AF37] text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition-colors">
-              Select
-            </button>
-          </td>
-        ))} */}
-      </tr>
-    </tbody>
+  <tr>
+    <td className="px-6 py-4">Price per Card</td>
+    {serviceTiers.map((tier, index) => (
+      <td key={index} className="px-6 py-4">
+        {currencySymbol}
+        {isYearly
+          ? (tier.price * yearlyDiscount).toFixed(2)
+          : tier.price.toFixed(2)}
+      </td>
+    ))}
+  </tr>
+  <tr>
+    <td className="px-6 py-4">Turnaround Time</td>
+    {serviceTiers.map((tier, index) => (
+      <td key={index} className="px-6 py-4">{tier.turnaround}</td>
+    ))}
+  </tr>
+  <tr>
+    <td className="px-6 py-4">Insurance</td>
+    {serviceTiers.map((tier, index) => (
+      <td key={index} className="px-6 py-4">{tier.insurance}</td>
+    ))}
+  </tr>
+  {Object.keys(serviceTiers[0].features).map((featureName, i) => (
+    <tr key={i}>
+      <td className="px-6 py-4">{featureName}</td>
+      {serviceTiers.map((tier, index) => (
+        <td key={index} className="px-6 py-4">
+          {tier.features[featureName] ? <FaCheck className="text-[#D4AF37]" /> : <FaTimes className="text-red-500" />}
+        </td>
+      ))}
+    </tr>
+  ))}
+</tbody>
   </table>
 </div>
 

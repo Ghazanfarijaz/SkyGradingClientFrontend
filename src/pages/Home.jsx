@@ -40,8 +40,8 @@ function Home() {
         <StaticImageSlider />
         <ServicesSection />
         <SlidingCards />
-        <Testimonials />
-        <FAQSection />
+        {/* <Testimonials /> */}
+        {/* <FAQSection /> */}
 
         {/* <Footer /> */}
       </div>
