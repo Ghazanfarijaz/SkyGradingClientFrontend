@@ -548,7 +548,7 @@ const handleScanSuccess = (decodedText) => {
                       </Typography>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <div className="custom-field">Number:</div>
+                      <div className="custom-field">Certification No:</div>
                       <Typography
                         variant="body2"
                         sx={{
@@ -640,7 +640,7 @@ const handleScanSuccess = (decodedText) => {
                       </Typography>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <div className="custom-field w-44">Certification No:</div>
+                      <div className="custom-field w-44">Number:</div>
                       <Typography
                         variant="body2"
                         sx={{
