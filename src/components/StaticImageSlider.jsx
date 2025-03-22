@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import cardImage from "../assets/card.png"; // Replace with your image path
+import cardImage from "../assets/card2.jpg"; // Replace with your image path
 import polygon from "../assets/Polygon.png";
 const textSlides = [
   "Gem Mint 10: A SKY 10 is the pinnacle of perfection. This grade is awarded to cards with pristine corners, exceptional focus, and pack fresh original gloss. To qualify, the card must be entirely free of stains, though minimal printing imperfections may be  allowed if they do not affect the card's overall aesthetic. Centering must be precise, with tolerances of up to 60/40 on the front and 70/30 on the reverse.",
@@ -206,8 +206,8 @@ const StaticImageSlider = () => {
           src={cardImage}
           alt="Card Grading"
           style={{
-            maxWidth: "100%",
-            height: "100%",
+            maxWidth: "50%",
+            height: "50%",
           }}
         />
       </Box>
