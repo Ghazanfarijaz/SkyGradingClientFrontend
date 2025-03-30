@@ -192,25 +192,33 @@ const StaticImageSlider = () => {
       </Box>
 
       {/* Right Side - Static Image */}
-      <Box
-        sx={{
-          width: { md: "50%", sm: "100%" },
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-          padding: 1,
-        }}
-      >
-        <img
-          src={cardImage}
-          alt="Card Grading"
-          style={{
-            maxWidth: "50%",
-            height: "50%",
-          }}
-        />
-      </Box>
+
+{/* Right Side - Static Image */}
+<Box
+  sx={{
+    width: { md: "50%", xs: "100%" },
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    padding: 1,
+    height: { md: "90vh", xs: "auto" }, // Full viewport height on desktop
+    overflow: "hidden", // Prevent any potential overflow
+  }}
+>
+  <img
+    src={cardImage}
+    alt="Card Grading"
+    style={{
+      width: "auto",
+      height: "100%", // Take full height of container
+      maxHeight: "100%", // Never exceed container height
+      objectFit: "contain", // Maintain aspect ratio
+      objectPosition: "center", // Center the image vertically and horizontally
+    }}
+  />
+</Box>
+
     </Box>
   );
 };
