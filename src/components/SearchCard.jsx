@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "./button.css";
+import "./SearchCard.css";
 import { TextField, Card, CardContent, Typography, Divider, Box, Grid } from "@mui/material";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { useGetCardByCardNumberQuery, useGetAllCardsQuery } from "../api/apiSlice";
@@ -41,11 +42,11 @@ export default function SearchCard() {
   useEffect(() => {
     if (cardData?.image) {
       const mockCards = [
-        { id: "189824", img: cardData.image },
-        { id: "123456", img: cardData.image },
-        { id: "123456", img: cardData.image },
-        { id: "123456", img: cardData.image },
-        { id: "123456", img: cardData.image },
+        { id: "189824", img: cardData.image, backImg: cardData.image2 }, // Include both images
+        { id: "123456", img: cardData.image, backImg: cardData.image2 },
+        { id: "123456", img: cardData.image, backImg: cardData.image2 },
+        { id: "123456", img: cardData.image, backImg: cardData.image2 },
+        { id: "123456", img: cardData.image, backImg: cardData.image2 },
       ];
       setMockCards(mockCards);
     }
@@ -407,29 +408,38 @@ const handleScanSuccess = (decodedText) => {
       {/* Card Details Section */}
       {selectedCard && (
         <>
-          <Swiper
-            effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            slidesPerView={"auto"}
-            coverflowEffect={{
-              rotate: 50,
-              stretch: 0,
-              depth: 100,
-              modifier: 1,
-              slideShadows: true,
-            }}
-            modules={[EffectCoverflow, Pagination]}
-            className="mySwiper"
-            onSwiper={(swiper) => (swiperRef.current = swiper)}
-            sx={{ mb: 8 }}
-          >
-            {mockCards.map((card, index) => (
-              <SwiperSlide key={index}>
-                <img src={card.img} alt={card.name} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+      <Swiper
+  effect={"coverflow"}
+  grabCursor={true}
+  centeredSlides={true}
+  slidesPerView={"auto"}
+  coverflowEffect={{
+    rotate: 50,
+    stretch: 0,
+    depth: 100,
+    modifier: 1,
+    slideShadows: true,
+  }}
+  modules={[EffectCoverflow, Pagination]}
+  className="mySwiper"
+  onSwiper={(swiper) => (swiperRef.current = swiper)}
+  sx={{ mb: 8 }}
+>
+  {mockCards.map((card, index) => (
+    <SwiperSlide key={index}>
+      <div className="flip-card">
+        <div className="flip-card-inner">
+          <div className="flip-card-front">
+            <img src={card.img} alt={`${card.name} front`} />
+          </div>
+          <div className="flip-card-back">
+            <img src={card.backImg} alt={`${card.name} back`} />
+          </div>
+        </div>
+      </div>
+    </SwiperSlide>
+  ))}
+</Swiper>
 
           {/* Card Details */}
           <div>
