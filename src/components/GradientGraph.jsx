@@ -416,7 +416,6 @@
 // export default GradeBarChartDensity;
 
 
-import { Divider } from "@mui/material";
 import React from "react";
 import {
   BarChart,
@@ -509,7 +508,6 @@ const GradeBarChartDensity = ({ allCards }) => {
         margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 50 } : { top: 20, right: 30, left: 30, bottom: 50 }}
         layout={isMobile ? "vertical" : "horizontal"} // Switch to vertical on mobile if needed
       >
-       
         <CartesianGrid strokeDasharray="3 3" vertical={!isMobile} />
         <XAxis
           dataKey="grade"
