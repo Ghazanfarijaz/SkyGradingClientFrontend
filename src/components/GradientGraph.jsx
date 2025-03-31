@@ -416,6 +416,7 @@
 // export default GradeBarChartDensity;
 
 
+
 import React from "react";
 import {
   BarChart,
@@ -442,9 +443,6 @@ const categorizeCard = (card) => {
 };
 
 const GradeBarChartDensity = ({ allCards }) => {
-  // Check if mobile view
-  const isMobile = window.innerWidth <= 768;
-
   // 1. Group Cards by Grade AND Tier (A/B/C)
   const gradeTierGroups = {};
   allCards.forEach((card) => {
@@ -463,15 +461,16 @@ const GradeBarChartDensity = ({ allCards }) => {
     const group = gradeTierGroups[grade] || { A: 0, B: 0, C: 0 };
     barData.push({
       grade,
-      "A-tier (Premium)": group.A,
+      "A-tier (Premium)": group.A,  // Key matches legend name
       "B-tier (Mid)": group.B,
       "C-tier (Basic)": group.C,
     });
   }
 
-  // 3. Custom Tooltip
+  // 3. Custom Tooltip (Fixed: Now reads A/B/C counts correctly)
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
+      // Get the full data object for the hovered grade
       const data = payload[0].payload;
       const total = data["A-tier (Premium)"] + data["B-tier (Mid)"] + data["C-tier (Basic)"];
       
@@ -481,7 +480,6 @@ const GradeBarChartDensity = ({ allCards }) => {
           padding: "10px", 
           borderRadius: "5px", 
           color: "#FFF",
-          fontSize: isMobile ? "12px" : "14px",
         }}>
           <p><strong>Grade {label}</strong></p>
           <p>A-tier: {data["A-tier (Premium)"]}</p>
@@ -494,34 +492,34 @@ const GradeBarChartDensity = ({ allCards }) => {
     return null;
   };
 
-  // Colors for tiers
+  // Colors for tiers (matching your original)
   const tierColors = {
-    "A-tier (Premium)": "#4CAF50",
-    "B-tier (Mid)": "#FFC107",
-    "C-tier (Basic)": "#F44336",
+    "A-tier (Premium)": "#4CAF50",  // Green
+    "B-tier (Mid)": "#FFC107",      // Yellow
+    "C-tier (Basic)": "#F44336",    // Red
   };
 
   return (
-    <ResponsiveContainer width="100%" height={isMobile ? 400 : 500}>
+    <ResponsiveContainer width="100%" height={500}>
+      
       <BarChart
         data={barData}
-        margin={isMobile ? { top: 20, right: 10, left: 10, bottom: 50 } : { top: 20, right: 30, left: 30, bottom: 50 }}
-        layout={isMobile ? "vertical" : "horizontal"} // Switch to vertical on mobile if needed
+        margin={{ top: 20, right: 30, left: 30, bottom: 50 }}
       >
-        <CartesianGrid strokeDasharray="3 3" vertical={!isMobile} />
+          
+        <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis
           dataKey="grade"
           domain={[0, 10]}
-          ticks={isMobile ? [0, 2, 4, 6, 8, 10] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+          ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
           label={{
             value: "Grade",
             position: "insideBottom",
-            offset: isMobile ? -30 : -40,
+            offset: -40,
             fill: "#FFFFFF",
-            style: { fontSize: isMobile ? 16 : 20 },
+            style: { fontSize: 20 },
           }}
-          tick={{ fill: "#FFFFFF", fontSize: isMobile ? 12 : 14 }}
-          interval={isMobile ? 1 : 0} // Show fewer ticks on mobile
+          tick={{ fill: "#FFFFFF", fontSize: 14 }}
         />
         <YAxis
           label={{
@@ -529,29 +527,12 @@ const GradeBarChartDensity = ({ allCards }) => {
             angle: -90,
             position: "insideLeft",
             fill: "#FFFFFF",
-            style: { fontSize: isMobile ? 16 : 20 },
+            style: { fontSize: 20 },
           }}
-          tick={{ fill: "#FFFFFF", fontSize: isMobile ? 12 : 14 }}
-          width={isMobile ? 40 : 60}
+          tick={{ fill: "#FFFFFF" }}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Legend 
-          wrapperStyle={{
-            paddingTop: isMobile ? "10px" : "0",
-          }}
-          layout={isMobile ? "horizontal" : "horizontal"}
-          verticalAlign={isMobile ? "bottom" : "top"}
-          iconSize={isMobile ? 12 : 16}
-          iconType={isMobile ? "square" : "square"}
-          formatter={(value) => (
-            <span style={{ 
-              color: "#FFF", 
-              fontSize: isMobile ? "12px" : "14px" 
-            }}>
-              {value}
-            </span>
-          )}
-        />
+     
         <Bar 
           dataKey="A-tier (Premium)" 
           stackId="a" 
@@ -570,6 +551,11 @@ const GradeBarChartDensity = ({ allCards }) => {
           fill={tierColors["C-tier (Basic)"]} 
           name="C-tier (Basic)" 
         />
+        
+         <Legend 
+          verticalAlign="top"
+          layout="vertical"
+          />
       </BarChart>
     </ResponsiveContainer>
   );
