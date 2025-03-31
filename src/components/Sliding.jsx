@@ -91,7 +91,6 @@ export default function Sliding() {
   // Fetch all cards
   const { data: allCards, isLoading, isError } = useGetAllCardsQuery();
 
-  console.log(allCards);
 
   // Handle loading state
   if (isLoading) {
