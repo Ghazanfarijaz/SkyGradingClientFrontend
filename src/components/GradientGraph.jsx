@@ -415,8 +415,6 @@
 
 // export default GradeBarChartDensity;
 
-
-
 import React from "react";
 import {
   BarChart,
@@ -429,51 +427,54 @@ import {
   Legend,
 } from "recharts";
 
-// Categorize cards into A/B/C tiers
-const categorizeCard = (card) => {
-  if (card.holographic && card.grade >= 9) {
-    return "A";
-  } else if (card.grade >= 9 && (card.trackingStatus === "shipped" || card.trackingStatus === "completed")) {
-    return "A";
-  } else if (card.grade >= 7 || card.trackingStatus === "checking") {
-    return "B";
-  } else {
-    return "C";
-  }
-};
+const GradeBarChartDensity = ({ allCards, selectedCard }) => {
+  // Debugging: Log the input props
+  console.log("GradeBarChartDensity props:", { allCards, selectedCard });
 
-const GradeBarChartDensity = ({ allCards }) => {
-  // 1. Group Cards by Grade AND Tier (A/B/C)
-  const gradeTierGroups = {};
-  allCards.forEach((card) => {
-    const grade = card.grade;
-    const tier = categorizeCard(card);
-
-    if (!gradeTierGroups[grade]) {
-      gradeTierGroups[grade] = { A: 0, B: 0, C: 0 };
+  // Safely handle allCards input
+  let cardsArray = [];
+  try {
+    if (Array.isArray(allCards)) {
+      cardsArray = allCards;
+    } else if (allCards && typeof allCards === 'object') {
+      cardsArray = [allCards];
     }
-    gradeTierGroups[grade][tier]++;
+  } catch (error) {
+    console.error("Error processing allCards:", error);
+  }
+
+  // Debugging: Log processed cardsArray
+  console.log("Processed cardsArray:", cardsArray);
+
+  // Filter cards from the same set
+  const cardsFromSameSet = cardsArray.filter(card => {
+    return card && card.set && selectedCard && card.set === selectedCard.set;
   });
 
-  // 2. Prepare Stacked Bar Chart Data
-  const barData = [];
-  for (let grade = 0; grade <= 10; grade++) {
-    const group = gradeTierGroups[grade] || { A: 0, B: 0, C: 0 };
-    barData.push({
-      grade,
-      "A-tier (Premium)": group.A,  // Key matches legend name
-      "B-tier (Mid)": group.B,
-      "C-tier (Basic)": group.C,
-    });
-  }
+  // Debugging: Log filtered cards
+  console.log("Cards from same set:", cardsFromSameSet);
 
-  // 3. Custom Tooltip (Fixed: Now reads A/B/C counts correctly)
+  // Group cards by grade
+  const gradeGroups = {};
+  cardsFromSameSet.forEach(card => {
+    const grade = Math.floor(Number(card.grade));
+    if (!isNaN(grade) && grade >= 0 && grade <= 10) {
+      gradeGroups[grade] = (gradeGroups[grade] || 0) + 1;
+    }
+  });
+
+  // Prepare chart data - ensure all grades 0-10 are represented
+  const barData = Array.from({ length: 11 }, (_, grade) => ({
+    grade,
+    count: gradeGroups[grade] || 0,
+  }));
+
+  // Debugging: Log final barData
+  console.log("Chart data:", barData);
+
+  // Custom Tooltip
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-      // Get the full data object for the hovered grade
-      const data = payload[0].payload;
-      const total = data["A-tier (Premium)"] + data["B-tier (Mid)"] + data["C-tier (Basic)"];
-      
       return (
         <div className="custom-tooltip" style={{ 
           backgroundColor: "#333", 
@@ -482,31 +483,35 @@ const GradeBarChartDensity = ({ allCards }) => {
           color: "#FFF",
         }}>
           <p><strong>Grade {label}</strong></p>
-          <p>A-tier: {data["A-tier (Premium)"]}</p>
-          <p>B-tier: {data["B-tier (Mid)"]}</p>
-          <p>C-tier: {data["C-tier (Basic)"]}</p>
-          <p>Total: {total}</p>
+          <p>Number of cards: {payload[0].value}</p>
         </div>
       );
     }
     return null;
   };
 
-  // Colors for tiers (matching your original)
-  const tierColors = {
-    "A-tier (Premium)": "#4CAF50",  // Green
-    "B-tier (Mid)": "#FFC107",      // Yellow
-    "C-tier (Basic)": "#F44336",    // Red
-  };
+  // If no data, show a message
+  if (cardsFromSameSet.length === 0) {
+    return (
+      <div style={{
+        height: 500,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#fff',
+        fontSize: '1.2rem'
+      }}>
+        No cards found from the "{selectedCard?.set || 'selected'}" set
+      </div>
+    );
+  }
 
   return (
     <ResponsiveContainer width="100%" height={500}>
-      
       <BarChart
         data={barData}
         margin={{ top: 20, right: 30, left: 30, bottom: 50 }}
       >
-          
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis
           dataKey="grade"
@@ -532,30 +537,12 @@ const GradeBarChartDensity = ({ allCards }) => {
           tick={{ fill: "#FFFFFF" }}
         />
         <Tooltip content={<CustomTooltip />} />
-     
         <Bar 
-          dataKey="A-tier (Premium)" 
-          stackId="a" 
-          fill={tierColors["A-tier (Premium)"]} 
-          name="A-tier (Premium)" 
+          dataKey="count" 
+          fill="#8884d8" 
+          name={`Cards from ${selectedCard?.set || 'selected set'}`}
         />
-        <Bar 
-          dataKey="B-tier (Mid)" 
-          stackId="a" 
-          fill={tierColors["B-tier (Mid)"]} 
-          name="B-tier (Mid)" 
-        />
-        <Bar 
-          dataKey="C-tier (Basic)" 
-          stackId="a" 
-          fill={tierColors["C-tier (Basic)"]} 
-          name="C-tier (Basic)" 
-        />
-        
-         <Legend 
-          verticalAlign="top"
-          layout="vertical"
-          />
+        <Legend />
       </BarChart>
     </ResponsiveContainer>
   );

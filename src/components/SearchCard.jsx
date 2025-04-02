@@ -803,7 +803,7 @@ const handleScanSuccess = (decodedText) => {
             </Box>
           </div>
           <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-28">
-            <GradientAreaChart allCards={allCards} />
+            <GradientAreaChart allCards={allCards} selectedCard={selectedCard} />
           </div>
         </>
       )}
