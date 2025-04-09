@@ -36,7 +36,6 @@
 
 //   console.log("data format" , formattedData)
 
-
 //   return (
 //     <ResponsiveContainer width="100%" height={700}>
 //       <AreaChart
@@ -99,11 +98,7 @@
 
 // export default GradientAreaChart;
 
-
-
 //=========================================
-
-
 
 // import React from "react";
 // import {
@@ -211,7 +206,6 @@
 
 // export default GradientAreaChart;
 
-
 // import React from "react";
 // import {
 //   AreaChart,
@@ -302,7 +296,6 @@
 // };
 
 // export default GradientAreaChart;
-
 
 // import React from "react";
 // import {
@@ -414,7 +407,6 @@
 // };
 
 // export default GradeBarChartDensity;
-
 import React from "react";
 import {
   BarChart,
@@ -436,7 +428,7 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
   try {
     if (Array.isArray(allCards)) {
       cardsArray = allCards;
-    } else if (allCards && typeof allCards === 'object') {
+    } else if (allCards && typeof allCards === "object") {
       cardsArray = [allCards];
     }
   } catch (error) {
@@ -446,17 +438,27 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
   // Debugging: Log processed cardsArray
   console.log("Processed cardsArray:", cardsArray);
 
-  // Filter cards from the same set
-  const cardsFromSameSet = cardsArray.filter(card => {
-    return card && card.set && selectedCard && card.set === selectedCard.set;
+  // Filter cards from the same set AND with the same certification number
+  const filteredCards = cardsArray.filter((card) => {
+    const sameSet =
+      card && card.set && selectedCard && card.set === selectedCard.set;
+    const sameCertification =
+      card &&
+      card.certificationNumber &&
+      selectedCard &&
+      card.certificationNumber === selectedCard.certificationNumber;
+    return sameSet && sameCertification;
   });
 
   // Debugging: Log filtered cards
-  console.log("Cards from same set:", cardsFromSameSet);
+  console.log(
+    "Filtered cards (same set and certification number):",
+    filteredCards
+  );
 
   // Group cards by grade
   const gradeGroups = {};
-  cardsFromSameSet.forEach(card => {
+  filteredCards.forEach((card) => {
     const grade = Math.floor(Number(card.grade));
     if (!isNaN(grade) && grade >= 0 && grade <= 10) {
       gradeGroups[grade] = (gradeGroups[grade] || 0) + 1;
@@ -476,13 +478,18 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip" style={{ 
-          backgroundColor: "#333", 
-          padding: "10px", 
-          borderRadius: "5px", 
-          color: "#FFF",
-        }}>
-          <p><strong>Grade {label}</strong></p>
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: "#333",
+            padding: "10px",
+            borderRadius: "5px",
+            color: "#FFF",
+          }}
+        >
+          <p>
+            <strong>Grade {label}</strong>
+          </p>
           <p>Number of cards: {payload[0].value}</p>
         </div>
       );
@@ -491,17 +498,20 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
   };
 
   // If no data, show a message
-  if (cardsFromSameSet.length === 0) {
+  if (filteredCards.length === 0) {
     return (
-      <div style={{
-        height: 500,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#fff',
-        fontSize: '1.2rem'
-      }}>
-        No cards found from the "{selectedCard?.set || 'selected'}" set
+      <div
+        style={{
+          height: 500,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "#fff",
+          fontSize: "1.2rem",
+        }}
+      >
+        No cards found from the "{selectedCard?.set || "selected"}" set with
+        certification number "{selectedCard?.certificationNumber || ""}"
       </div>
     );
   }
@@ -537,10 +547,12 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
           tick={{ fill: "#FFFFFF" }}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Bar 
-          dataKey="count" 
-          fill="#8884d8" 
-          name={`Cards from ${selectedCard?.set || 'selected set'}`}
+        <Bar
+          dataKey="count"
+          fill="#8884d8"
+          name={`Cards from ${selectedCard?.set || "selected set"} (Cert #${
+            selectedCard?.certificationNumber || ""
+          })`}
         />
         <Legend />
       </BarChart>
