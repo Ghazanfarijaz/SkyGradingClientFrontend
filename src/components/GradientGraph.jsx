@@ -407,6 +407,142 @@
 // };
 
 // export default GradeBarChartDensity;
+
+// import React from "react";
+// import {
+//   BarChart,
+//   Bar,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   ResponsiveContainer,
+//   Legend,
+// } from "recharts";
+
+// const GradeBarChartDensity = ({ allCards, selectedCard }) => {
+//   // Debugging: Log the input props
+//   console.log("GradeBarChartDensity props:", { allCards, selectedCard });
+
+//   // Safely handle allCards input
+//   let cardsArray = [];
+//   try {
+//     if (Array.isArray(allCards)) {
+//       cardsArray = allCards;
+//     } else if (allCards && typeof allCards === 'object') {
+//       cardsArray = [allCards];
+//     }
+//   } catch (error) {
+//     console.error("Error processing allCards:", error);
+//   }
+
+//   // Debugging: Log processed cardsArray
+//   console.log("Processed cardsArray:", cardsArray);
+
+//   // Filter cards from the same set
+//   const cardsFromSameSet = cardsArray.filter(card => {
+//     return card && card.set && selectedCard && card.set === selectedCard.set;
+//   });
+
+//   // Debugging: Log filtered cards
+//   console.log("Cards from same set:", cardsFromSameSet);
+
+//   // Group cards by grade
+//   const gradeGroups = {};
+//   cardsFromSameSet.forEach(card => {
+//     const grade = Math.floor(Number(card.grade));
+//     if (!isNaN(grade) && grade >= 0 && grade <= 10) {
+//       gradeGroups[grade] = (gradeGroups[grade] || 0) + 1;
+//     }
+//   });
+
+//   // Prepare chart data - ensure all grades 0-10 are represented
+//   const barData = Array.from({ length: 11 }, (_, grade) => ({
+//     grade,
+//     count: gradeGroups[grade] || 0,
+//   }));
+
+//   // Debugging: Log final barData
+//   console.log("Chart data:", barData);
+
+//   // Custom Tooltip
+//   const CustomTooltip = ({ active, payload, label }) => {
+//     if (active && payload && payload.length) {
+//       return (
+//         <div className="custom-tooltip" style={{
+//           backgroundColor: "#333",
+//           padding: "10px",
+//           borderRadius: "5px",
+//           color: "#FFF",
+//         }}>
+//           <p><strong>Grade {label}</strong></p>
+//           <p>Number of cards: {payload[0].value}</p>
+//         </div>
+//       );
+//     }
+//     return null;
+//   };
+
+//   // If no data, show a message
+//   if (cardsFromSameSet.length === 0) {
+//     return (
+//       <div style={{
+//         height: 500,
+//         display: 'flex',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         color: '#fff',
+//         fontSize: '1.2rem'
+//       }}>
+//         No cards found from the "{selectedCard?.set || 'selected'}" set
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <ResponsiveContainer width="100%" height={500}>
+//       <BarChart
+//         data={barData}
+//         margin={{ top: 20, right: 30, left: 30, bottom: 50 }}
+//       >
+//         <CartesianGrid strokeDasharray="3 3" vertical={false} />
+//         <XAxis
+//           dataKey="grade"
+//           domain={[0, 10]}
+//           ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+//           label={{
+//             value: "Grade",
+//             position: "insideBottom",
+//             offset: -40,
+//             fill: "#FFFFFF",
+//             style: { fontSize: 20 },
+//           }}
+//           tick={{ fill: "#FFFFFF", fontSize: 14 }}
+//         />
+//         <YAxis
+//           label={{
+//             value: "Number of Cards",
+//             angle: -90,
+//             position: "insideLeft",
+//             fill: "#FFFFFF",
+//             style: { fontSize: 20 },
+//           }}
+//           tick={{ fill: "#FFFFFF" }}
+//         />
+//         <Tooltip content={<CustomTooltip />} />
+//         <Bar
+//           dataKey="count"
+//           fill="#8884d8"
+//           name={`Cards from ${selectedCard?.set || 'selected set'}`}
+//         />
+//         <Legend />
+//       </BarChart>
+//     </ResponsiveContainer>
+//   );
+// };
+
+// export default GradeBarChartDensity;
+
 import React from "react";
 import {
   BarChart,
