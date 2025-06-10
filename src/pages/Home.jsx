@@ -39,7 +39,7 @@ function Home() {
         </Box> */}
         <StaticImageSlider />
         <ServicesSection />
-        <SlidingCards />
+        {/* <SlidingCards /> */}
         {/* <Testimonials /> */}
         {/* <FAQSection /> */}
 

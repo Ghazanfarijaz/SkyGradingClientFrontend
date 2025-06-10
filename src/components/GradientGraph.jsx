@@ -610,7 +610,7 @@ const GradeBarChartDensity = ({ allCards, selectedCard }) => {
   // Debugging: Log final barData
   console.log("Chart data:", barData);
 
-  // Custom Tooltip
+  // Custom Tooltip function
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
