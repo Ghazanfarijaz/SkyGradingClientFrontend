@@ -4,14 +4,23 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "./button.css";
 import "./SearchCard.css";
-import { TextField, Card, CardContent, Typography, Divider, Box, Grid } from "@mui/material";
+import {
+  TextField,
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Box,
+  Grid,
+} from "@mui/material";
 import { EffectCoverflow, Pagination } from "swiper/modules";
-import { useGetCardByCardNumberQuery, useGetAllCardsQuery } from "../api/apiSlice";
+import {
+  useGetCardByCardNumberQuery,
+  useGetAllCardsQuery,
+} from "../api/apiSlice";
 import { Html5Qrcode } from "html5-qrcode";
 import GradientAreaChart from "./GradientGraph";
 import triangle from "../assets/triangle.png";
-
-
 
 import polygon from "../assets/Polygon.png";
 import group from "../assets/Group.png";
@@ -82,9 +91,6 @@ export default function SearchCard() {
     }
   };
 
-
- 
-
   useEffect(() => {
     if (isScanning) {
       const startScanner = async () => {
@@ -106,7 +112,7 @@ export default function SearchCard() {
           setIsScanning(false);
         }
       };
-  
+
       startScanner();
     } else {
       if (qrReaderRef.current) {
@@ -117,7 +123,7 @@ export default function SearchCard() {
         });
       }
     }
-  
+
     return () => {
       if (qrReaderRef.current) {
         qrReaderRef.current.stop().then(() => {
@@ -128,28 +134,26 @@ export default function SearchCard() {
     };
   }, [isScanning]);
 
-const handleScanSuccess = (decodedText) => {
-  console.log("Scan success:", decodedText);
+  const handleScanSuccess = (decodedText) => {
+    console.log("Scan success:", decodedText);
 
-  let cardNumber = decodedText;
+    let cardNumber = decodedText;
 
-  try {
-    const parsedData = JSON.parse(decodedText);
-    if (parsedData && parsedData.cardNumber) {
-      cardNumber = parsedData.cardNumber;
+    try {
+      const parsedData = JSON.parse(decodedText);
+      if (parsedData && parsedData.cardNumber) {
+        cardNumber = parsedData.cardNumber;
+      }
+    } catch (error) {
+      // If parsing fails, use decodedText as cardNumber
     }
-  } catch (error) {
-    // If parsing fails, use decodedText as cardNumber
-  }
 
-  setSearchInput(cardNumber);
-  // handleSearch();
-  stopScanning();
-};
+    setSearchInput(cardNumber);
+    // handleSearch();
+    stopScanning();
+  };
 
-
-
-// ...
+  // ...
 
   const handleScanFailure = (error) => {
     console.error("QR Code scanning failed:", error);
@@ -174,272 +178,271 @@ const handleScanSuccess = (decodedText) => {
   };
   return (
     <div className="min-h-[100vh] bg-transparent text-white flex flex-col items-center pt-28">
-       <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        height: "110vh",
-        width: "100%",
-        position: "relative",
-        overflow: "hidden",
-        backgroundColor: "#1A1A1A", // Dark Page background
-      }}
-    >
-      {/* Background Gradient */}
       <Box
         sx={{
-          position: "absolute",
-          top: "40%",
-          left: "5%",
-          transform: "translateX(-50%)",
-          width: { md: "300px", xs: "150px" },
-          height: "150px",
-          background:
-            "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.65) 100%)",
-          filter: "blur(100px)",
-          zIndex: 0, // Place the gradient behind the content
-        }}
-      ></Box>
-      <div class="absolute top-[40%] left-[2%] h-12">
-        <img src={polygon} />
-      </div>
-      <div class="absolute top-[80%] sm:top-[10%] md:top-[75%] left-[60%] sm:left-[10%] md:left-[80%] h-12">
-        <img src={polygon} alt="polygon" />
-      </div>
-      <div class="absolute top-[75%]  left-[0%]  h-12">
-        <img src={group} alt="polygon" />
-      </div>
-      <Box
-        sx={{
-          position: "absolute",
-          top: { xs: "20%", md: "30%" },
-          left: { md: "90%", xs: "55%" },
-          transform: "translateX(-50%)",
-          width: { md: "300px", xs: "150px" },
-          height: "150px",
-          background:
-            "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.65) 100%)",
-          filter: "blur(100px)",
-          zIndex: 0, // Place the gradient behind the content
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          top: "95%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "1589px",
-          height: "194px",
-          background:
-            "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.2) 20%)",
-          filter: "blur(100px)",
-          zIndex: 0, // Place the gradient behind the content
-        }}
-      />
-      {/* Outer Box with Gradient Border */}
-      <Box
-        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          height: "110vh",
+          width: "100%",
           position: "relative",
-          width: { xs: "100%", md: "500px" },
-          borderRadius: "35px",
-          background: "linear-gradient(to bottom, #121212, #02CCFE)", // Gradient border
-          padding: "4px", // Border thickness
-          zIndex: 1, // Content on top
+          overflow: "hidden",
+          backgroundColor: "#1A1A1A", // Dark Page background
         }}
       >
-        {/* Inner Box */}
+        {/* Background Gradient */}
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "12px 24px",
-            borderRadius: "31px", // Slightly smaller than the outer border
-            backgroundColor: "#121212", // Solid black background for content
+            position: "absolute",
+            top: "40%",
+            left: "5%",
+            transform: "translateX(-50%)",
+            width: { md: "300px", xs: "150px" },
+            height: "150px",
+            background:
+              "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.65) 100%)",
+            filter: "blur(100px)",
+            zIndex: 0, // Place the gradient behind the content
+          }}
+        ></Box>
+        <div class="absolute top-[40%] left-[2%] h-12">
+          <img src={polygon} />
+        </div>
+        <div class="absolute top-[80%] sm:top-[10%] md:top-[75%] left-[60%] sm:left-[10%] md:left-[80%] h-12">
+          <img src={polygon} alt="polygon" />
+        </div>
+        <div class="absolute top-[75%]  left-[0%]  h-12">
+          <img src={group} alt="polygon" />
+        </div>
+        <Box
+          sx={{
+            position: "absolute",
+            top: { xs: "20%", md: "30%" },
+            left: { md: "90%", xs: "55%" },
+            transform: "translateX(-50%)",
+            width: { md: "300px", xs: "150px" },
+            height: "150px",
+            background:
+              "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.65) 100%)",
+            filter: "blur(100px)",
+            zIndex: 0, // Place the gradient behind the content
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            top: "95%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "1589px",
+            height: "194px",
+            background:
+              "radial-gradient(circle, rgba(2, 204, 254, 0.5) 0%, rgba(2, 204, 254, 0.2) 20%)",
+            filter: "blur(100px)",
+            zIndex: 0, // Place the gradient behind the content
+          }}
+        />
+        {/* Outer Box with Gradient Border */}
+        <Box
+          sx={{
+            position: "relative",
+            width: { xs: "100%", md: "500px" },
+            borderRadius: "35px",
+            background: "linear-gradient(to bottom, #121212, #02CCFE)", // Gradient border
+            padding: "4px", // Border thickness
+            zIndex: 1, // Content on top
           }}
         >
-          {/* Main Text */}
-          <Typography
+          {/* Inner Box */}
+          <Box
             sx={{
-              fontWeight: "bold",
-              fontSize: { md: "16px", xs: "12px" },
-              color: "#FFFFFF",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 24px",
+              borderRadius: "31px", // Slightly smaller than the outer border
+              backgroundColor: "#121212", // Solid black background for content
             }}
           >
-            Unleash the Full Potential of Your Cards
-          </Typography>
+            {/* Main Text */}
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: { md: "16px", xs: "12px" },
+                color: "#FFFFFF",
+              }}
+            >
+              Unleash the Full Potential of Your Cards
+            </Typography>
 
-          {/* Discover More */}
-          <Typography
-          component={Link}
-           to="/submit"
-            sx={{
-              fontWeight: "bold",
-              fontSize: { md: "16px", xs: "12px" },
-              color: "#F27013", // Orange color
-              cursor: "pointer",
-            }}
-          
-          >
-            Discover More
-          </Typography>
+            {/* Discover More */}
+            <Typography
+              component={Link}
+              to="/submit"
+              sx={{
+                fontWeight: "bold",
+                fontSize: { md: "16px", xs: "12px" },
+                color: "#F27013", // Orange color
+                cursor: "pointer",
+              }}
+            >
+              Discover More
+            </Typography>
+          </Box>
         </Box>
-      </Box>
 
-      {/* Title */}
-      <Typography
-        sx={{
-          color: "white",
-          fontSize: { md: "80px", xs: "32px" },
-          fontWeight: "bold",
-          textAlign: "center",
-          mt: "4vh",
-          letterSpacing: "3px", // Add letter spacing
-          zIndex: 1,
-        }}
-      >
-        Welcome to Sky Grading— <br />
-        Your Trusted Card Grading <br /> Service!
-      </Typography>
-
-      {/* Subtitle */}
-      <Typography
-        sx={{
-          color: "white",
-          fontSize: "20px",
-          textAlign: "center",
-          mt: "2vh",
-          zIndex: 1,
-        }}
-      >
-        Experience unparalleled professionalism and ease in card grading,
-        tailored
-        <br /> just for you.
-      </Typography>
-
-
-      <Box sx={{ width: "60%", padding: "10px 0" }}>
-      <Divider
-        sx={{
-          borderColor: "white", // White line
-          borderWidth: "2px", // Thicker line
-          opacity: 0.2, // Slight transparency for a subtle look
-          marginTop: 2,
-          marginBottom: 2
-        }}
-      />
-    </Box>
-
-           {/* Search Section */}
-           <div className="w-full max-w-8xl mb-8 px-4">
-      <div className="w-full max-w-8xl mb-8 px-4">
-  <div className="flex flex-wrap gap-4 items-center justify-center">
-    {/* TextField */}
-    <TextField
-      variant="outlined"
-      value={searchInput}
-      onChange={(e) => setSearchInput(e.target.value)}
-      placeholder="Enter card number..."
-      sx={{
-        width: "100%",
-        maxWidth: "600px", // Restricts the max width of the input
-        "& .MuiOutlinedInput-root": {
-          borderRadius: "50px",
-          background: "transparent",
-          border: "2px solid transparent",
-          backgroundImage:
-            "linear-gradient(#000, #000), linear-gradient(90deg, #ffffff, #02CCFE)",
-          backgroundOrigin: "border-box",
-          backgroundClip: "content-box, border-box",
-          "& input": {
-            color: "#FFFFFF",
+        {/* Title */}
+        <Typography
+          sx={{
+            color: "white",
+            fontSize: { md: "80px", xs: "32px" },
+            fontWeight: "bold",
             textAlign: "center",
-          },
-        },
-      }}
-    />
-    <div className="flex gap-4 items-center justify-center md:justify-between flex-col md:flex-row">
-      {/* Search Button */}
-      <button
-        onClick={handleSearch}
-        className="custom-button md:px-4 px-2 py-2 text-sm md:text-base w-full md:w-auto"
-      >
-        Search
-      </button>
+            mt: "4vh",
+            letterSpacing: "3px", // Add letter spacing
+            zIndex: 1,
+          }}
+        >
+          Welcome to Sky Grading— <br />
+          Your Trusted Card Grading <br /> Service!
+        </Typography>
 
-      {/* Random Card Button */}
-      <button
-        onClick={handleRandomCard}
-        className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
-      >
-        Random Card
-      </button>
-      <button
-        onClick={startScanning}
-        className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
-      >
-        {isScanning ? "Scanning..." : "Scan QR Code"}
-      </button>
-    </div>
-  </div>
-</div>
-{/* QR Scanner */}
-{/* {isScanning && (
+        {/* Subtitle */}
+        <Typography
+          sx={{
+            color: "white",
+            fontSize: "20px",
+            textAlign: "center",
+            mt: "2vh",
+            zIndex: 1,
+          }}
+        >
+          Experience unparalleled professionalism and ease in card grading,
+          tailored
+          <br /> just for you.
+        </Typography>
+
+        <Box sx={{ width: "60%", padding: "10px 0" }}>
+          <Divider
+            sx={{
+              borderColor: "white", // White line
+              borderWidth: "2px", // Thicker line
+              opacity: 0.2, // Slight transparency for a subtle look
+              marginTop: 2,
+              marginBottom: 2,
+            }}
+          />
+        </Box>
+
+        {/* Search Section */}
+        <div className="w-full max-w-8xl mb-8 px-4">
+          <div className="w-full max-w-8xl mb-8 px-4">
+            <div className="flex flex-wrap gap-4 items-center justify-center">
+              {/* TextField */}
+              <TextField
+                variant="outlined"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Enter card number..."
+                sx={{
+                  width: "100%",
+                  maxWidth: "600px", // Restricts the max width of the input
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "50px",
+                    background: "transparent",
+                    border: "2px solid transparent",
+                    backgroundImage:
+                      "linear-gradient(#000, #000), linear-gradient(90deg, #ffffff, #02CCFE)",
+                    backgroundOrigin: "border-box",
+                    backgroundClip: "content-box, border-box",
+                    "& input": {
+                      color: "#FFFFFF",
+                      textAlign: "center",
+                    },
+                  },
+                }}
+              />
+              <div className="flex gap-4 items-center justify-center md:justify-between flex-col md:flex-row">
+                {/* Search Button */}
+                <button
+                  onClick={handleSearch}
+                  className="custom-button md:px-4 px-2 py-2 text-sm md:text-base w-full md:w-auto"
+                >
+                  Search
+                </button>
+
+                {/* Random Card Button */}
+                <button
+                  onClick={handleRandomCard}
+                  className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
+                >
+                  Random Card
+                </button>
+                <button
+                  onClick={startScanning}
+                  className="custom-button px-4 py-2 text-sm md:text-base w-full md:w-auto"
+                >
+                  {isScanning ? "Scanning..." : "Scan QR Code"}
+                </button>
+              </div>
+            </div>
+          </div>
+          {/* QR Scanner */}
+          {/* {isScanning && (
   <div
     id="reader"
     ref={readerRef}  // Attach the ref to the div
     style={{ width: "300px", height: "300px" }}
   ></div>
 )} */}
-      </div>
-    </Box>
-
-
- 
+        </div>
+      </Box>
 
       {/* QR Scanner */}
       {isScanning && (
-        <div id="reader" ref={readerRef} style={{ width: "300px", height: "300px" }}></div>
+        <div
+          id="reader"
+          ref={readerRef}
+          style={{ width: "300px", height: "300px" }}
+        ></div>
       )}
 
       {/* Card Details Section */}
       {selectedCard && (
         <>
-      <Swiper
-  effect={"coverflow"}
-  grabCursor={true}
-  centeredSlides={true}
-  slidesPerView={"auto"}
-  coverflowEffect={{
-    rotate: 50,
-    stretch: 0,
-    depth: 100,
-    modifier: 1,
-    slideShadows: true,
-  }}
-  modules={[EffectCoverflow, Pagination]}
-  className="mySwiper"
-  onSwiper={(swiper) => (swiperRef.current = swiper)}
-  sx={{ mb: 8 }}
->
-  {mockCards.map((card, index) => (
-    <SwiperSlide key={index}>
-      <div className="flip-card">
-        <div className="flip-card-inner">
-          <div className="flip-card-front">
-            <img src={card.img} alt={`${card.name} front`} />
-          </div>
-          <div className="flip-card-back">
-            <img src={card.backImg} alt={`${card.name} back`} />
-          </div>
-        </div>
-      </div>
-    </SwiperSlide>
-  ))}
-</Swiper>
+          <Swiper
+            effect={"coverflow"}
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={"auto"}
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: 100,
+              modifier: 1,
+              slideShadows: true,
+            }}
+            modules={[EffectCoverflow, Pagination]}
+            className="mySwiper"
+            onSwiper={(swiper) => (swiperRef.current = swiper)}
+            sx={{ mb: 8 }}
+          >
+            {mockCards.map((card, index) => (
+              <SwiperSlide key={index}>
+                <div className="flip-card">
+                  <div className="flip-card-inner">
+                    <div className="flip-card-front">
+                      <img src={card.img} alt={`${card.name} front`} />
+                    </div>
+                    <div className="flip-card-back">
+                      <img src={card.backImg} alt={`${card.name} back`} />
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
           {/* Card Details */}
           <div>
@@ -466,7 +469,8 @@ const handleScanSuccess = (decodedText) => {
                   borderRadius: "40px",
                   padding: "4px",
                   background: "linear-gradient(to left, #FFFFFF, #50A1FF)",
-                  WebkitMask: "linear-gradient(#000, #000) content-box, linear-gradient(#fff, #fff)",
+                  WebkitMask:
+                    "linear-gradient(#000, #000) content-box, linear-gradient(#fff, #fff)",
                   WebkitMaskComposite: "destination-out",
                   maskComposite: "exclude",
                 },
@@ -728,7 +732,8 @@ const handleScanSuccess = (decodedText) => {
                             sx={{
                               width: { xs: "60px", sm: "70px", md: "80px" },
                               height: { xs: "40px", sm: "45px", md: "50px" },
-                              background: "linear-gradient(to bottom, #00bfff, #0000ff)",
+                              background:
+                                "linear-gradient(to bottom, #00bfff, #0000ff)",
                               borderRadius: "8px",
                               display: "flex",
                               alignItems: "center",
@@ -742,7 +747,11 @@ const handleScanSuccess = (decodedText) => {
                               sx={{
                                 color: "white",
                                 fontWeight: "bold",
-                                fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" },
+                                fontSize: {
+                                  xs: "0.8rem",
+                                  sm: "1rem",
+                                  md: "1.2rem",
+                                },
                               }}
                             >
                               {value}
@@ -753,7 +762,11 @@ const handleScanSuccess = (decodedText) => {
                             sx={{
                               textAlign: "center",
                               mt: 1,
-                              fontSize: { xs: "0.6rem", sm: "0.8rem", md: "1rem" },
+                              fontSize: {
+                                xs: "0.6rem",
+                                sm: "0.8rem",
+                                md: "1rem",
+                              },
                             }}
                           >
                             {key}
@@ -779,7 +792,8 @@ const handleScanSuccess = (decodedText) => {
                     sx={{
                       width: { xs: "80px", sm: "90px", md: "100px" },
                       height: { xs: "50px", sm: "55px", md: "60px" },
-                      background: "linear-gradient(to bottom, #00bfff, #0000ff)",
+                      background:
+                        "linear-gradient(to bottom, #00bfff, #0000ff)",
                       borderRadius: "8px",
                       display: "flex",
                       alignItems: "center",
@@ -803,14 +817,16 @@ const handleScanSuccess = (decodedText) => {
             </Box>
           </div>
           <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-28">
-            <GradientAreaChart allCards={allCards} selectedCard={selectedCard} />
+            <GradientAreaChart
+              allCards={allCards}
+              selectedCard={selectedCard}
+            />
           </div>
         </>
       )}
     </div>
   );
 }
-
 
 // import React, { useRef, useState , useEffect} from "react";
 // // Import Swiper React components
@@ -843,8 +859,6 @@ const handleScanSuccess = (decodedText) => {
 // import { Html5Qrcode } from "html5-qrcode";
 // import { Html5QrcodeScanner } from "html5-qrcode";
 
-
-
 // export default function SearchCard() {
 //   const swiperRef = useRef(null);
 //   const [selectedCard, setSelectedCard] = useState(null);
@@ -856,7 +870,7 @@ const handleScanSuccess = (decodedText) => {
 //   const [mockCards, setMockCards] = useState(null);
 
 //   const qrReaderRef = useRef(null);
-//   const readerRef = useRef(null); 
+//   const readerRef = useRef(null);
 
 //   console.log("selected cards ", selectedCard);
 
@@ -895,9 +909,6 @@ const handleScanSuccess = (decodedText) => {
 //     }
 //   }, [cardData]); // Run this effect whenever cardData changes
 
-
-
-
 //   //==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 //   const searchclick = () => {};
@@ -915,8 +926,6 @@ const handleScanSuccess = (decodedText) => {
 //     }
 //   };
 
-
-
 //   const handleRandomCard = () => {
 //     const randomIndex = Math.floor(Math.random() * allCards.length);
 //     const randomCardNumber = allCards[randomIndex].cardNumber;
@@ -930,7 +939,6 @@ const handleScanSuccess = (decodedText) => {
 //     return randomCardNumber; // Optional: if you want to use the value somewhere else
 //   };
 
-
 // //===================================================================
 
 //   useEffect(() => {
@@ -941,10 +949,10 @@ const handleScanSuccess = (decodedText) => {
 //         console.error("Element with id 'reader' not found.");
 //         return;
 //       }
-  
+
 //       const html5QrCode = new Html5Qrcode("reader");
 //       qrReaderRef.current = html5QrCode;
-  
+
 //       html5QrCode
 //         .start(
 //           { facingMode: "environment" },
@@ -964,7 +972,7 @@ const handleScanSuccess = (decodedText) => {
 //           setIsScanning(false);
 //         });
 //     }
-  
+
 //     return () => {
 //       console.log("Cleanup triggered");
 //       if (scannerActive && qrReaderRef.current) {
@@ -978,10 +986,10 @@ const handleScanSuccess = (decodedText) => {
 
 //   const handleScanSuccess = (decodedText) => {
 //     console.log("Scan success:", decodedText);
-  
+
 //     // Assuming the decoded text is a string of numbers (cardNumber)
 //     const cardIndex = allCards.findIndex((card) => card.cardNumber === decodedText);
-  
+
 //     if (cardIndex !== -1) {
 //       // Card found, set it as selected
 //       setSelectedCard(allCards[cardIndex]);
@@ -996,7 +1004,6 @@ const handleScanSuccess = (decodedText) => {
 //       stopScanning(); // Stop scanning after a failed scan
 //     }
 //   };
-  
 
 //   const handleScanFailure = (error) => {
 //     console.error("QR Code scanning failed:", error);
@@ -1019,7 +1026,6 @@ const handleScanSuccess = (decodedText) => {
 //   };
 
 // //===========================================================
-
 
 //   return (
 //     <div className="min-h-[100vh] bg-transparent text-white flex flex-col items-center   pt-28">
