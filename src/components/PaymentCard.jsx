@@ -1011,7 +1011,7 @@ function PaymentCard() {
                 <label className="text-[#F2F2F2] opacity-70">Card Number</label>
                 <input
                   type="text"
-                  name="cardNumber"
+                  name="certificationNumber"
                   placeholder="Enter your Card Number"
                   value={formData.certificationNumber}
                   onChange={handleChange}
