@@ -60,6 +60,14 @@ const apiSlice = createApi({
       }),
       invalidatesTags: ["Cards"], // Invalidate the "Cards" tag to refetch the list
     }),
+      addCardDirect: builder.mutation({
+      query: (cardData) => ({
+        url: "/cards/add",
+        method: "POST",
+        body: cardData,
+      }),
+      invalidatesTags: ["Cards"], // Invalidate the "Cards" tag to refetch the list
+    }),
     getCardByUserId: builder.query({
       query: (userId) => `/cards/user/${userId}`,
       providesTags: (result, error, arg) => [{ type: "Cards", id: `User-${arg}` }],
@@ -127,6 +135,7 @@ export const {
   useFetchCardsQuery,
   useGetCardByCardNumberQuery,
   useAddCardMutation,
+  useAddCardDirectMutation,
   useGetCardByUserIdQuery,
   useGetCardByUserIdAndCardNumberQuery,
   useGetAllCardsQuery,

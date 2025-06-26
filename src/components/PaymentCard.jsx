@@ -1,4 +1,3 @@
-
 // import React, { useState } from "react";
 // import {
 //   Box,
@@ -626,11 +625,11 @@ function PaymentCard() {
     name: "",
     set: "",
     releaseYear: "",
-    cardNumber: "",
+    cardNumber: "N/A",
     language: "",
     label: "",
     holographic: true,
-    // certificationNumber: "",
+    certificationNumber: "",
     address: "",
     userId: user.id,
     totalAmount: "",
@@ -1014,7 +1013,7 @@ function PaymentCard() {
                   type="text"
                   name="cardNumber"
                   placeholder="Enter your Card Number"
-                  value={formData.cardNumber}
+                  value={formData.certificationNumber}
                   onChange={handleChange}
                   className="bg-transparent text-white w-full h-[56px] p-4 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70"
                 />
@@ -1071,35 +1070,35 @@ function PaymentCard() {
               </div>
             </div>
 
-              {/* Holographic */}
+            {/* Holographic */}
             <div className="w-full flex flex-col items-start gap-2">
               <label className="text-[#F2F2F2] opacity-70">Holographic</label>
               <select
-                  name="holographic"
-                  value={formData.holographic}
-                  onChange={handleChange}
-                  className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
-                  style={{
-                    backgroundColor: "#1E1E1E",
-                    color: "#F2F2F2",
-                  }}
+                name="holographic"
+                value={formData.holographic}
+                onChange={handleChange}
+                className="bg-transparent text-white w-full h-[58px] p-3 rounded-xl outline-none placeholder-[#F2F2F2] placeholder-opacity-70 border-4 border-[#F2F2F2] border-opacity-70 appearance-none"
+                style={{
+                  backgroundColor: "#1E1E1E",
+                  color: "#F2F2F2",
+                }}
+              >
+                <option value="" disabled className="bg-black text-white">
+                  Select a Holographic or Recerse Holographic
+                </option>
+                <option
+                  value={true}
+                  className="bg-black text-white hover:bg-gray-800"
                 >
-                  <option value="" disabled className="bg-black text-white">
-                    Select a Holographic or Recerse Holographic
-                  </option>
-                  <option
-                    value= {true}
-                    className="bg-black text-white hover:bg-gray-800"
-                  >
-                    Holographic
-                  </option>
-                  <option
-                    value= {false}
-                    className="bg-black text-white hover:bg-gray-800"
-                  >
-                    Recerse Holographic
-                  </option>                
-                </select>
+                  Holographic
+                </option>
+                <option
+                  value={false}
+                  className="bg-black text-white hover:bg-gray-800"
+                >
+                  Recerse Holographic
+                </option>
+              </select>
             </div>
 
             {/* Certification Number */}

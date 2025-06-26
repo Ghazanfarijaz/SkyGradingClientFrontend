@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useAddCardMutation } from "../api/apiSlice"; // Import the addCard mutation
+import { useAddCardDirectMutation, useAddCardMutation } from "../api/apiSlice"; // Import the addCard mutation
 
 function Success() {
   const navigate = useNavigate();
-  const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
+  // const [addCard] = useAddCardMutation(); // Initialize the addCard mutation
+
+  const [addCard] = useAddCardDirectMutation();
 
   useEffect(() => {
     // Retrieve the cardsArray from localStorage
@@ -22,7 +24,7 @@ function Success() {
             console.log("Card added to database:", card);
           }
           console.log("All cards submitted successfully!");
-          alert("All cards submitted successfully!")
+          alert("All cards submitted successfully!");
 
           // Clear the cardsArray from localStorage after submission
           localStorage.removeItem("cardsArray");
