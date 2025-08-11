@@ -605,7 +605,7 @@ function Success() {
             </button>
 
             <button
-              onClick={() => navigate("/collection")}
+              onClick={() => navigate("/search")}
               style={{
                 borderColor: "white",
                 color: "white",
