@@ -81,7 +81,9 @@ function Success() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
+    // Retrieve and immediately remove cards from localStorage
     const storedCards = JSON.parse(localStorage.getItem("cardsArray"));
+    localStorage.removeItem("cardsArray"); // Clear immediately
 
     if (storedCards && storedCards.length > 0) {
       console.log("Cards retrieved from localStorage:", storedCards);
@@ -93,30 +95,24 @@ function Success() {
           for (let i = 0; i < storedCards.length; i++) {
             const card = storedCards[i];
             await addCard(card).unwrap();
-            console.log("Card added to database:", card);
             setSubmitProgress(((i + 1) / storedCards.length) * 100);
-
-            // Add a small delay for better UX
             await new Promise((resolve) => setTimeout(resolve, 300));
           }
-
           console.log("All cards submitted successfully!");
           setIsSubmitting(false);
           setAllSubmitted(true);
-
-          // Show card details after a brief delay
           setTimeout(() => setShowDetails(true), 500);
-
-          localStorage.removeItem("cardsArray");
         } catch (error) {
           console.error("Error submitting cards to database:", error);
           setIsSubmitting(false);
+
+          // Optional: Re-store cards if submission fails
+          localStorage.setItem("cardsArray", JSON.stringify(storedCards));
         }
       };
 
       submitCards();
     } else {
-      // If no cards to submit, show success immediately
       setAllSubmitted(true);
       setTimeout(() => setShowDetails(true), 500);
     }
@@ -402,45 +398,32 @@ function Success() {
                     <div
                       key={index}
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
                         padding: "16px",
-                        marginBottom: "16px",
                         borderRadius: "12px",
-                        background:
-                          "linear-gradient(90deg, rgba(103, 126, 234, 0.05), rgba(118, 75, 162, 0.05))",
-                        border: "1px solid rgba(103, 126, 234, 0.1)",
+                        background: "rgba(255,255,255,0.9)",
+                        border: "1px solid rgba(0,0,0,0.1)",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                         transition: "all 0.3s ease",
-                        animation: `slideInCard 0.5s ease-out ${
-                          index * 0.1
-                        }s both`,
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateX(8px)";
-                        e.currentTarget.style.boxShadow =
-                          "0 4px 16px rgba(103, 126, 234, 0.2)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateX(0)";
-                        e.currentTarget.style.boxShadow = "none";
                       }}
                     >
-                      <div style={{ flex: 1 }}>
-                        <div
-                          style={{
-                            fontWeight: "600",
-                            marginBottom: "8px",
-                            fontSize: "1rem",
-                            color: "#333",
-                          }}
-                        >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <h4 style={{ margin: 0, color: "#333" }}>
                           {card.name || `Card ${index + 1}`}
+                        </h4>
+                        <div style={{ color: "#4CAF50", fontWeight: "bold" }}>
+                          {card.price || "N/A"}
                         </div>
+                      </div>
+
+                      <div style={{ marginTop: "12px" }}>
                         <div
                           style={{
                             display: "flex",
-                            alignItems: "center",
                             gap: "8px",
                             flexWrap: "wrap",
                           }}
@@ -453,60 +436,40 @@ function Success() {
                                 fontSize: "0.75rem",
                                 padding: "4px 8px",
                                 borderRadius: "12px",
-                                fontWeight: "500",
                               }}
                             >
                               {card.set}
                             </span>
                           )}
-                          {card.rarity && (
+                          {card.selectedAmount && (
                             <span
                               style={{
-                                backgroundColor:
-                                  getRarityColor(card.rarity) + "20",
-                                color: getRarityColor(card.rarity),
+                                backgroundColor: "rgba(76, 175, 80, 0.1)",
+                                color: "#4CAF50",
                                 fontSize: "0.75rem",
                                 padding: "4px 8px",
                                 borderRadius: "12px",
-                                fontWeight: "500",
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "4px",
                               }}
                             >
-                              <Star size={12} />
-                              {card.rarity}
-                            </span>
-                          )}
-                          {card.condition && (
-                            <span
-                              style={{
-                                border: "1px solid #ddd",
-                                color: "#666",
-                                fontSize: "0.75rem",
-                                padding: "4px 8px",
-                                borderRadius: "12px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {card.condition}
+                              {card.selectedAmount}
                             </span>
                           )}
                         </div>
-                      </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div
-                          style={{
-                            color: "#4CAF50",
-                            fontWeight: "bold",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontSize: "1.25rem",
-                          }}
-                        >
-                          <TrendingUp size={16} />
-                          {card.price || "N/A"}
+
+                        <div style={{ marginTop: "12px", fontSize: "0.9rem" }}>
+                          <div>
+                            <strong>Certification:</strong>{" "}
+                            {card.certificationNumber || "N/A"}
+                          </div>
+                          <div>
+                            <strong>Label:</strong> {card.label || "N/A"}
+                          </div>
+                          {card.holographic && (
+                            <div>
+                              <strong>Holographic:</strong>{" "}
+                              {card.holographic.toString()}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
