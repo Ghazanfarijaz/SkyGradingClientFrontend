@@ -961,7 +961,6 @@ function PaymentCard() {
           </div>
         </Box>
         <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
-
         {/* Title */}
         <Typography
           variant="h1"
@@ -977,9 +976,7 @@ function PaymentCard() {
         >
           Submit Your Card Details For Grading
         </Typography>
-
         <Divider sx={{ bgcolor: "#7D7A7A", mb: 5 }} />
-
         {/* Form */}
         <form onSubmit={handleSubmit}>
           <Box
@@ -1259,7 +1256,6 @@ function PaymentCard() {
             </Button>
           </Box>
         </form>
-
         {/* Response Message */}
         {responseMessage && (
           <Typography
@@ -1276,7 +1272,6 @@ function PaymentCard() {
             {responseMessage}
           </Typography>
         )}
-
         {/* Display QR Codes for All Cards */}
         {cardsArray.length > 0 && (
           <Box sx={{ mt: 4 }}>
@@ -1325,7 +1320,122 @@ function PaymentCard() {
             </Box>
           </Box>
         )}
+        {/* ============================================================ */}
+        // Add this inside PaymentCard component (above the total amount
+        display)
+        {cardsArray.length > 0 && (
+          <Box
+            sx={{
+              mt: 4,
+              backgroundColor: "#1E1E1E",
+              borderRadius: 2,
+              border: "1px solid #50A1FF",
+              overflow: "hidden",
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                bgcolor: "#50A1FF",
+                color: "black",
+                p: 2,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              ORDER SUMMARY
+            </Typography>
 
+            <Box sx={{ p: 2, maxHeight: 300, overflowY: "auto" }}>
+              {cardsArray.map((card, index) => (
+                <Box
+                  key={index}
+                  sx={{ mb: 2, borderBottom: "1px solid #7D7A7A", pb: 2 }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      color: "#50A1FF",
+                      fontWeight: "bold",
+                      mb: 1,
+                    }}
+                  >
+                    Card #{index + 1}
+                  </Typography>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      Certification Number:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      {card.certificationNumber}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      Service Level:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      {card.selectedAmount} (AU$
+                      {ServiceAmountValues[card.selectedAmount]?.toFixed(2)})
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      Label Type:
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                      {card.label} (AU${labelValues[card.label]?.toFixed(2)})
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+
+              {/* Fixed Fee */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mt: 2,
+                  pt: 2,
+                  borderTop: "1px solid #50A1FF",
+                }}
+              >
+                <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                  Processing Fee:
+                </Typography>
+                <Typography variant="body2" sx={{ color: "#F2F2F2" }}>
+                  AU$15.00
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        )}
+        {/* Updated Total Display */}
+        <Typography
+          variant="h6"
+          align="center"
+          color="white"
+          sx={{
+            mt: 2,
+            fontSize: "1.2rem",
+            fontWeight: "bold",
+            backgroundColor: "#50A1FF20",
+            py: 1,
+            borderRadius: 1,
+          }}
+        >
+          TOTAL: AU${calculateTotal().toFixed(2)}
+        </Typography>
+        {/* =========================================================== */}
         {/* Total Amount */}
         <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
           Total Amount: AU$ {calculateTotal().toFixed(2)}
