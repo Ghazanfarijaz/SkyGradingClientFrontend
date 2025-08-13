@@ -761,11 +761,11 @@ function PaymentCard() {
       name: "",
       set: "",
       releaseYear: "",
-      cardNumber: "",
+      // cardNumber: "",
       language: "",
       label: "",
       holographic: "",
-      // certificationNumber: "",
+      certificationNumber: "",
       address: "",
       userId: user.id,
       totalAmount: "",
@@ -777,15 +777,22 @@ function PaymentCard() {
   const addmore = async (e) => {
     e.preventDefault();
 
-    const { name, set, releaseYear, cardNumber, language, label, address } =
-      formData;
+    const {
+      name,
+      set,
+      releaseYear,
+      certificationNumber,
+      language,
+      label,
+      address,
+    } = formData;
 
     // Basic validation
     if (
       !name ||
       !set ||
       !releaseYear ||
-      !cardNumber ||
+      !certificationNumber ||
       !language ||
       !label ||
       !address
@@ -795,7 +802,7 @@ function PaymentCard() {
     }
 
     // Generate QR code for the card
-    const qrCodeUrl = await generateQRCode(cardNumber);
+    const qrCodeUrl = await generateQRCode(certificationNumber);
 
     // Add the current form data and QR code to the cardsArray
     const newCard = { ...formData, qrCodeUrl };
@@ -819,6 +826,24 @@ function PaymentCard() {
     }
   };
 
+  // Add this helper function
+  const calculateTotal = () => {
+    let total = 0;
+
+    // Sum all label costs
+    cardsArray.forEach((card) => {
+      total += labelValues[card.label] || 0;
+    });
+
+    // Sum all service costs
+    cardsArray.forEach((card) => {
+      total += ServiceAmountValues[card.selectedAmount] || 0;
+    });
+
+    // Add fixed $15 fee
+    return total + 15;
+  };
+
   // Handle form submission with API integration
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -833,19 +858,21 @@ function PaymentCard() {
       return;
     }
 
-    // Step 1: Calculate the total amount
-    let totalAmount = 0;
-    cardsArray.forEach((card) => {
-      const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
-      totalAmount += labelValue; // Add the label value to the total amount
-    });
+    // // Step 1: Calculate the total amount
+    // let totalAmount = 0;
+    // cardsArray.forEach((card) => {
+    //   const labelValue = labelValues[card.label] || 0; // Get the label value or default to 0
+    //   totalAmount += labelValue; // Add the label value to the total amount
+    // });
 
-    cardsArray.forEach((card) => {
-      const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
-      totalAmount += ServiceAmountValue; // Add the label value to the total amount
-    });
+    // cardsArray.forEach((card) => {
+    //   const ServiceAmountValue = ServiceAmountValues[card.selectedAmount] || 0; // Get the label value or default to 0
+    //   totalAmount += ServiceAmountValue; // Add the label value to the total amount
+    // });
 
-    setServiceAmount(totalAmount);
+    // setServiceAmount(totalAmount);
+    // Calculate total using helper
+    const totalAmount = calculateTotal();
 
     // Step 2: Save the cardsArray to localStorage before redirecting to Stripe
     localStorage.setItem("cardsArray", JSON.stringify(cardsArray));
@@ -858,7 +885,7 @@ function PaymentCard() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            amount: Math.round(totalAmount + 15), // Convert to cents (Stripe expects amounts in cents)
+            amount: Math.round(totalAmount), // Convert to cents (Stripe expects amounts in cents)
             currency: "aud",
             successUrl: `${window.location.origin}/success`, // Redirect URL after successful payment
             cancelUrl: `${window.location.origin}/cancel`, // Redirect URL if payment is canceled
@@ -1301,8 +1328,8 @@ function PaymentCard() {
 
         {/* Total Amount */}
         <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
-          Total Amount: AU$
-          {(
+          Total Amount: AU$ {calculateTotal().toFixed(2)}
+          {/* {(
             ServiceAmount +
             cardsArray.reduce(
               (sum, card) => sum + (labelValues[card.label] || 0),
@@ -1313,7 +1340,7 @@ function PaymentCard() {
                 sum + (ServiceAmountValues[card.selectedAmount] || 0),
               0
             )
-          ).toFixed(2)}
+          ).toFixed(2)} */}
         </Typography>
       </Box>
     </Container>
