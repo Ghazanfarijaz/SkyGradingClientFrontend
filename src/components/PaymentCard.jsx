@@ -1433,12 +1433,12 @@ function PaymentCard() {
             borderRadius: 1,
           }}
         >
-          TOTAL: AU${calculateTotal().toFixed(2)}
+          TOTAL AMOUNT: AU${calculateTotal().toFixed(2)}
         </Typography>
         {/* =========================================================== */}
         {/* Total Amount */}
         <Typography variant="h6" align="center" color="white" sx={{ mt: 2 }}>
-          Total Amount: AU$ {calculateTotal().toFixed(2)}
+          {/* Total Amount: AU$ {calculateTotal().toFixed(2)} */}
           {/* {(
             ServiceAmount +
             cardsArray.reduce(
